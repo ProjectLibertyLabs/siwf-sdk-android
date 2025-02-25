@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
 android {
@@ -34,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
