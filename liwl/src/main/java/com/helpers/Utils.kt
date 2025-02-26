@@ -1,5 +1,7 @@
 package com.helpers
 
+import android.util.Log
+
 // The Base64-URL alphabet as a list of strings.
 val TO_BASE64URL: List<String> =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".map { it.toString() }

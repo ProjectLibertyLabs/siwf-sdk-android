@@ -7,7 +7,7 @@ enum class LiwlButtonMode {
 }
 
 data class GenerateAuthData(
-    val signedRequest: Any,
+    val signedRequest: SiwfSignedRequest,
     val additionalCallbackUrlParams: Map<String, String>,
     val options: SiwfOptions?
 )

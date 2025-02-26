@@ -4,14 +4,22 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.browser.customtabs.CustomTabsIntent
 import android.net.Uri
+import android.text.style.BackgroundColorSpan
 import android.util.Base64
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +54,7 @@ fun LiwlButton(
 
     val context = LocalContext.current
 
-    // Validate authUrl by attempting to create a URL instance
+//     Validate authUrl by attempting to create a URL instance
     val isValidUrl = try {
         Log.e("LiwlButton", authUrl)
         URL(authUrl)
@@ -63,15 +71,16 @@ fun LiwlButton(
             return@LaunchedEffect
         }
 
-        Log.d("LiwlButton", "Fetched assets: ${assets.images.logoPrimary}")
-        Log.d("LiwlButton", "Fetched assets: ${assets.content.title}")
         title = assets.content.title
+        val primaryColor = assets.colors.primary
+        val darkColor = assets.colors.dark
+        val lightColor = assets.colors.light
 
         when (mode) {
             LiwlButtonMode.PRIMARY -> {
-                backgroundColor = Color(android.graphics.Color.parseColor("${assets.colors.primary}"))
-                textColor = Color(android.graphics.Color.parseColor("#000000"))
-                borderColor = Color(android.graphics.Color.parseColor("${assets.colors.primary}"))
+                backgroundColor = Color(android.graphics.Color.parseColor(primaryColor))
+                textColor = Color(android.graphics.Color.parseColor(lightColor))
+                borderColor = Color(android.graphics.Color.parseColor(primaryColor))
                 assets.images.logoPrimary.let { logoBase64 ->
                     val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
                     logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
@@ -79,9 +88,9 @@ fun LiwlButton(
                 }
             }
             LiwlButtonMode.DARK -> {
-                backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
-                textColor = Color(android.graphics.Color.parseColor("#000000"))
-                borderColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                backgroundColor = Color(android.graphics.Color.parseColor(darkColor))
+                textColor = Color(android.graphics.Color.parseColor(lightColor))
+                borderColor = Color(android.graphics.Color.parseColor(darkColor))
                 assets.images.logoLight.let { logoBase64 ->
                     val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
                     logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
@@ -89,9 +98,9 @@ fun LiwlButton(
                 }
             }
             LiwlButtonMode.LIGHT -> {
-                backgroundColor = Color(android.graphics.Color.parseColor("#000000"))
-                textColor = Color(android.graphics.Color.parseColor("#ffffff"))
-                borderColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                backgroundColor = Color(android.graphics.Color.parseColor(lightColor))
+                textColor = Color(android.graphics.Color.parseColor(darkColor))
+                borderColor = Color(android.graphics.Color.parseColor(darkColor))
                 assets.images.logoDark.let { logoBase64 ->
                     val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
                     logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
@@ -107,7 +116,12 @@ fun LiwlButton(
             handleAction()
             openUrl(context, authUrl)
         },
+        colors = ButtonDefaults.buttonColors(backgroundColor),
         shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(2.dp, borderColor),
+        modifier = Modifier
+            .padding(8.dp)
+            .height(50.dp),
         enabled = isValidUrl
     ) {
         Row(

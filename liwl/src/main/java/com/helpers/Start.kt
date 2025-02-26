@@ -5,10 +5,12 @@ import kotlinx.serialization.json.Json
 import java.net.URL
 import java.net.URLEncoder
 import android.util.Base64
+import android.util.Log
 import com.models.GenerateAuthData
+import com.models.SiwfSignedRequest
 
 // Encodes a SiwfSignedRequest into a Base64 URL-safe string.
-fun encodeSignedRequest(request: Any): String? {
+fun encodeSignedRequest(request: SiwfSignedRequest): String? {
     return try {
         val jsonString = Json.encodeToString(request)
         stringToBase64URL(jsonString)
@@ -54,6 +56,7 @@ fun buildUrlWithQuery(baseUrl: String, queryParams: Map<String, String>): URL? {
 fun generateAuthenticationUrl(authData: GenerateAuthData): URL? {
     val (signedRequest, additionalCallbackUrlParams, options ) = authData
     val encodedSignedRequest = encodeSignedRequest(signedRequest) ?: return null
+
     val endpoint = parseEndpoint(options?.endpoint ?: "mainnet", EndpointPath.START)
 
     // Build query parameters while excluding reserved keywords.
