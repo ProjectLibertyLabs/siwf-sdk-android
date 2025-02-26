@@ -1,5 +1,6 @@
-package com.models
+package com.helpers
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
@@ -33,28 +34,27 @@ data class Images(
     val logoDark: String
 )
 
-// This suspend function fetches the assets from the URL asynchronously.
-suspend fun fetchAssets(): Assets? {
+suspend fun fetchAssets(): Assets? = withContext(Dispatchers.IO) {
     val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
-    return withContext(Dispatchers.IO) {
-        try {
-            val url = URL(urlString)
-            (url.openConnection() as? HttpURLConnection)?.run {
-                requestMethod = "GET"
-                connectTimeout = 5000
-                readTimeout = 5000
-                connect()
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    val jsonResponse = inputStream.bufferedReader().use { it.readText() }
-                    Json { ignoreUnknownKeys = true }.decodeFromString<Assets>(jsonResponse)
-                } else {
-                    println("Error: HTTP $responseCode")
-                    null
-                }
-            }
-        } catch (e: Exception) {
-            println("Error fetching data: ${e.message}")
+    try {
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.connectTimeout = 5000
+        connection.readTimeout = 5000
+        connection.connect()
+
+        if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val json = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+            Json { ignoreUnknownKeys = true }.decodeFromString<Assets>(json)
+        } else {
+            Log.e("fetchAssets", "Error: ${connection.responseCode}")
+            connection.disconnect()
             null
         }
+    } catch (e: Exception) {
+        Log.e("fetchAssets", "Error fetching assets: $e")
+        null
     }
 }

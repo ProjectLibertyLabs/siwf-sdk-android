@@ -1,3 +1,5 @@
+package com.helpers
+
 import androidx.compose.ui.graphics.Color
 
 fun Color.Companion.fromHex(hex: String): Color {

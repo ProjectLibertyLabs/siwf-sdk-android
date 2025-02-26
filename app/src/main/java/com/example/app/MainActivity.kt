@@ -1,4 +1,4 @@
-package com.example.liwlapp
+package com.example.app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +15,10 @@ import com.models.SiwfSignedRequest
 import com.models.SiwfRequestedSignature
 import com.models.GenerateAuthData
 import com.models.LiwlButtonMode
+import android.util.Log
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 
 @Composable
 fun ContentView() {
@@ -55,8 +59,11 @@ fun ContentView() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewContentView() {
-    ContentView()
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            ContentView()
+        }
+    }
 }

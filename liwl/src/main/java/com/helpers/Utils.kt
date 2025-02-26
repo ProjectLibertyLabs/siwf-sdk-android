@@ -1,7 +1,4 @@
-// Utils.kt
-// Created by Claire Olmstead on 2/10/25.
-
-package com.example.utils
+package com.helpers
 
 // The Base64-URL alphabet as a list of strings.
 val TO_BASE64URL: List<String> =

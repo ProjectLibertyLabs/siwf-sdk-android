@@ -3,7 +3,9 @@ package com.liwl
 import androidx.compose.runtime.Composable
 import com.models.GenerateAuthData
 import com.models.LiwlButtonMode
-import com.models.generateAuthenticationUrl
+import android.util.Log
+import com.helpers.generateAuthenticationUrl
+
 
 object Liwl {
     @Composable
@@ -12,8 +14,10 @@ object Liwl {
         mode: LiwlButtonMode,
         authData: GenerateAuthData
     ) {
+        Log.d("authData*****", authData.toString())
         val authUrl = generateAuthenticationUrl(authData)
-        // Simply call the LiwlButton composable here rather than returning it
+        Log.d("authUrl*****", authUrl.toString())
+
         LiwlButton(
             mode = mode,
             authUrl = authUrl.toString(),

@@ -1,19 +1,11 @@
-package com.models
+package com.helpers
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URL
 import java.net.URLEncoder
 import android.util.Base64
-
-// Converts a JSON string into a URL-safe Base64-encoded string.
-fun stringToBase64URL(input: String): String {
-    val base64 = android.util.Base64.encodeToString(input.toByteArray(Charsets.UTF_8), android.util.Base64.NO_WRAP)
-    // Replace characters to make it URL-safe and remove trailing '='
-    return base64.replace("+", "-")
-        .replace("/", "_")
-        .replace("=", "")
-}
+import com.models.GenerateAuthData
 
 // Encodes a SiwfSignedRequest into a Base64 URL-safe string.
 fun encodeSignedRequest(request: Any): String? {

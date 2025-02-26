@@ -1,21 +1,15 @@
 package com.liwl
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.browser.customtabs.CustomTabsIntent
 import android.net.Uri
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -27,19 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.models.Assets
+import com.helpers.fetchAssets
 import com.models.LiwlButtonMode
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import java.net.HttpURLConnection
 import java.net.URL
 
 @Composable
@@ -48,60 +37,78 @@ fun LiwlButton(
     authUrl: String,
     handleAction: () -> Unit
 ) {
-    // Compose state variables similar to @State properties in SwiftUI
-    var title by remember { mutableStateOf("") }
+    // Compose state variables (similar to SwiftUI @State properties)
+    var title by remember { mutableStateOf("Sign In") }
     var backgroundColor by remember { mutableStateOf(Color.Gray) }
     var textColor by remember { mutableStateOf(Color.White) }
     var borderColor by remember { mutableStateOf(Color.Gray) }
     var logoImage by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
-    var showSafariView by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
-    // Fetch assets when the composable appears
-    LaunchedEffect(Unit) {
-        fetchAssets { assets ->
-            title = assets.content.title
+    // Validate authUrl by attempting to create a URL instance
+    val isValidUrl = try {
+        Log.e("LiwlButton", authUrl)
+        URL(authUrl)
+        true
+    } catch (e: Exception) {
+        false
+    }
 
-            when (mode) {
-                LiwlButtonMode.PRIMARY -> {
-                    backgroundColor = Color(android.graphics.Color.parseColor(assets.colors.primary))
-                    textColor = Color(android.graphics.Color.parseColor(assets.colors.light))
-                    borderColor = Color(android.graphics.Color.parseColor(assets.colors.primary))
-                    assets.images.logoPrimary?.let { logoBase64 ->
-                        val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                        logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                            ?.asImageBitmap()
-                    }
+    // Fetch assets asynchronously when this composable enters composition
+    LaunchedEffect(Unit) {
+        val assets = fetchAssets()
+        if (assets == null) {
+            Log.e("LiwlButton", "Failed to fetch assets")
+            return@LaunchedEffect
+        }
+
+        Log.d("LiwlButton", "Fetched assets: ${assets.images.logoPrimary}")
+        Log.d("LiwlButton", "Fetched assets: ${assets.content.title}")
+        title = assets.content.title
+
+        when (mode) {
+            LiwlButtonMode.PRIMARY -> {
+                backgroundColor = Color(android.graphics.Color.parseColor("${assets.colors.primary}"))
+                textColor = Color(android.graphics.Color.parseColor("#000000"))
+                borderColor = Color(android.graphics.Color.parseColor("${assets.colors.primary}"))
+                assets.images.logoPrimary.let { logoBase64 ->
+                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
+                    logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        ?.asImageBitmap()
                 }
-                LiwlButtonMode.DARK -> {
-                    backgroundColor = Color(android.graphics.Color.parseColor(assets.colors.dark))
-                    textColor = Color(android.graphics.Color.parseColor(assets.colors.light))
-                    borderColor = Color(android.graphics.Color.parseColor(assets.colors.dark))
-                    assets.images.logoLight?.let { logoBase64 ->
-                        val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                        logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                            ?.asImageBitmap()
-                    }
+            }
+            LiwlButtonMode.DARK -> {
+                backgroundColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                textColor = Color(android.graphics.Color.parseColor("#000000"))
+                borderColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                assets.images.logoLight.let { logoBase64 ->
+                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
+                    logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        ?.asImageBitmap()
                 }
-                LiwlButtonMode.LIGHT -> {
-                    backgroundColor = Color(android.graphics.Color.parseColor(assets.colors.light))
-                    textColor = Color(android.graphics.Color.parseColor(assets.colors.dark))
-                    borderColor = Color(android.graphics.Color.parseColor(assets.colors.dark))
-                    assets.images.logoDark?.let { logoBase64 ->
-                        val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                        logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                            ?.asImageBitmap()
-                    }
+            }
+            LiwlButtonMode.LIGHT -> {
+                backgroundColor = Color(android.graphics.Color.parseColor("#000000"))
+                textColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                borderColor = Color(android.graphics.Color.parseColor("#ffffff"))
+                assets.images.logoDark.let { logoBase64 ->
+                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
+                    logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        ?.asImageBitmap()
                 }
             }
         }
     }
 
-    // Button UI
+    // Button UI: the button is disabled if authUrl is not valid.
     Button(
-        onClick = { openUrl(context, authUrl) },
+        onClick = {
+            handleAction()
+            openUrl(context, authUrl)
+        },
         shape = RoundedCornerShape(24.dp),
+        enabled = isValidUrl
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -124,32 +131,5 @@ fun LiwlButton(
 private fun openUrl(context: Context, url: String) {
     if (url.isNotBlank()) {
         CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(url))
-    }
-}
-
-// A suspend function to fetch assets from the provided URL.
-suspend fun fetchAssets(onResult: (Assets) -> Unit) {
-    val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
-    try {
-        val url = URL(urlString)
-        withContext(Dispatchers.IO) {
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            connection.connectTimeout = 5000
-            connection.readTimeout = 5000
-            connection.connect()
-            if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-                val json = connection.inputStream.bufferedReader().use { it.readText() }
-                val assets = Json { ignoreUnknownKeys = true }.decodeFromString<Assets>(json)
-                withContext(Dispatchers.Main) {
-                    onResult(assets)
-                }
-            } else {
-                Log.e("fetchAssets", "Error: ${connection.responseCode}")
-            }
-            connection.disconnect()
-        }
-    } catch (e: Exception) {
-        Log.e("fetchAssets", "Error fetching assets: $e")
     }
 }
