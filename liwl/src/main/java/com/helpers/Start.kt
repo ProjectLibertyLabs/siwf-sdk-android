@@ -4,8 +4,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URL
 import java.net.URLEncoder
-import android.util.Base64
-import android.util.Log
 import com.models.GenerateAuthData
 import com.models.SiwfSignedRequest
 
