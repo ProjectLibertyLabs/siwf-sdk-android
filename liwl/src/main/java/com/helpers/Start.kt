@@ -1,30 +1,29 @@
 package com.helpers
 
+import android.util.Base64
+import com.models.GenerateAuthData
+import com.models.SiwfSignedRequest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URL
 import java.net.URLEncoder
-import com.models.GenerateAuthData
-import com.models.SiwfSignedRequest
 
-// Encodes a SiwfSignedRequest into a Base64 URL-safe string.
+enum class EndpointPath(val rawValue: String) {
+    START("/start"),
+    API_PAYLOAD("/api/payload")
+}
+
 fun encodeSignedRequest(request: SiwfSignedRequest): String? {
     return try {
         val jsonString = Json.encodeToString(request)
-        stringToBase64URL(jsonString)
+        val data: ByteArray = jsonString.encodeToByteArray()
+        return Base64.encodeToString(data, Base64.DEFAULT)
     } catch (e: Exception) {
         println("Error encoding signed request: ${e.message}")
         null
     }
 }
 
-// An enum representing endpoint paths.
-enum class EndpointPath(val rawValue: String) {
-    START("/start"),
-    API_PAYLOAD("/api/payload")
-}
-
-// Parses an input string to determine the full endpoint URL (as a String).
 fun parseEndpoint(input: String, path: EndpointPath): String {
     return when (input.lowercase()) {
         "mainnet", "production", "prod" ->
@@ -35,7 +34,6 @@ fun parseEndpoint(input: String, path: EndpointPath): String {
     }
 }
 
-// Helper function to build a URL from a base URL and query parameters.
 fun buildUrlWithQuery(baseUrl: String, queryParams: Map<String, String>): URL? {
     return try {
         val url = URL(baseUrl)
@@ -50,7 +48,6 @@ fun buildUrlWithQuery(baseUrl: String, queryParams: Map<String, String>): URL? {
     }
 }
 
-// Generates an authentication URL using the provided GenerateAuthData.
 fun generateAuthenticationUrl(authData: GenerateAuthData): URL? {
     val (signedRequest, additionalCallbackUrlParams, options ) = authData
     val encodedSignedRequest = encodeSignedRequest(signedRequest) ?: return null

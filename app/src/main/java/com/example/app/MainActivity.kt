@@ -15,7 +15,6 @@ import com.models.SiwfSignedRequest
 import com.models.SiwfRequestedSignature
 import com.models.GenerateAuthData
 import com.models.LiwlButtonMode
-import android.util.Log
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,29 +32,22 @@ fun ContentView() {
         )
     )
 
-    // Generate auth data using the example request
     val authData = GenerateAuthData(
         signedRequest = exampleRequest,
         additionalCallbackUrlParams = emptyMap(),
         options = null
     )
 
-    // Define the action to be performed on button click
-    val handleAction: () -> Unit = {
-        // TODO: Handle button action here
-    }
-
-    // Display the sign-in buttons in a vertical column with spacing
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.padding(16.dp)
     ) {
         // Primary Button
-        Liwl.CreateSignInButton(handleAction = handleAction, mode = LiwlButtonMode.PRIMARY, authData = authData)
+        Liwl.CreateSignInButton(mode = LiwlButtonMode.PRIMARY, authData = authData)
         // Dark Button
-        Liwl.CreateSignInButton(handleAction = handleAction, mode = LiwlButtonMode.DARK, authData = authData)
+        Liwl.CreateSignInButton(mode = LiwlButtonMode.DARK, authData = authData)
         // Light Button
-        Liwl.CreateSignInButton(handleAction = handleAction, mode = LiwlButtonMode.LIGHT, authData = authData)
+        Liwl.CreateSignInButton(mode = LiwlButtonMode.LIGHT, authData = authData)
     }
 }
 

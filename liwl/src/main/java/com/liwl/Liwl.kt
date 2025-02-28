@@ -8,7 +8,6 @@ import com.helpers.generateAuthenticationUrl
 object Liwl {
     @Composable
     fun CreateSignInButton(
-        handleAction: () -> Unit,
         mode: LiwlButtonMode,
         authData: GenerateAuthData
     ) {
@@ -17,7 +16,6 @@ object Liwl {
         LiwlButton(
             mode = mode,
             authUrl = authUrl.toString(),
-            handleAction = handleAction
         )
     }
 }

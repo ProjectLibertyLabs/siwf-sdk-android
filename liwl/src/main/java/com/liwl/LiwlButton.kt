@@ -39,9 +39,7 @@ import java.net.URL
 fun LiwlButton(
     mode: LiwlButtonMode = LiwlButtonMode.PRIMARY,
     authUrl: String,
-    handleAction: () -> Unit
 ) {
-    // Compose state variables (similar to SwiftUI @State properties)
     var title by remember { mutableStateOf("Sign In") }
     var backgroundColor by remember { mutableStateOf(Color.Gray) }
     var textColor by remember { mutableStateOf(Color.White) }
@@ -50,7 +48,6 @@ fun LiwlButton(
 
     val context = LocalContext.current
 
-//     Validate authUrl by attempting to create a URL instance
     val isValidUrl = try {
         Log.e("LiwlButton", authUrl)
         URL(authUrl)
@@ -59,7 +56,6 @@ fun LiwlButton(
         false
     }
 
-    // Fetch assets asynchronously when this composable enters composition
     LaunchedEffect(Unit) {
         val assets = fetchAssets()
         if (assets == null) {
@@ -109,7 +105,6 @@ fun LiwlButton(
     // Button UI: the button is disabled if authUrl is not valid.
     Button(
         onClick = {
-            handleAction()
             openUrl(context, authUrl)
         },
         colors = ButtonDefaults.buttonColors(backgroundColor),
