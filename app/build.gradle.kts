@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.liwl"
+    namespace = "com.example.app"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.liwl"
+        applicationId = "com.example.app"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
