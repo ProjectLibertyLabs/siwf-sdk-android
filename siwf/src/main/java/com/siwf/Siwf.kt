@@ -1,19 +1,19 @@
-package com.liwl
+package com.siwf
 
 import androidx.compose.runtime.Composable
 import com.models.GenerateAuthData
-import com.models.LiwlButtonMode
+import com.models.SiwfButtonMode
 import com.helpers.generateAuthenticationUrl
 
-object Liwl {
+object Siwf {
     @Composable
     fun CreateSignInButton(
-        mode: LiwlButtonMode,
+        mode: SiwfButtonMode,
         authData: GenerateAuthData
     ) {
         val authUrl = generateAuthenticationUrl(authData)
 
-        LiwlButton(
+        SiwfButton(
             mode = mode,
             authUrl = authUrl.toString(),
         )

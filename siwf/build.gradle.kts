@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.liwl"
+    namespace = "com.example.siwf"
     compileSdk = 34
 
     defaultConfig {

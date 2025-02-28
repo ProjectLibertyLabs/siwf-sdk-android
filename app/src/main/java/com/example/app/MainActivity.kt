@@ -7,14 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.liwl.Liwl
+import com.siwf.Siwf
 import com.models.SiwfPayload
 import com.models.SiwfPublicKey
 import com.models.SiwfSignature
 import com.models.SiwfSignedRequest
 import com.models.SiwfRequestedSignature
 import com.models.GenerateAuthData
-import com.models.LiwlButtonMode
+import com.models.SiwfButtonMode
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -43,11 +43,11 @@ fun ContentView() {
         modifier = Modifier.padding(16.dp)
     ) {
         // Primary Button
-        Liwl.CreateSignInButton(mode = LiwlButtonMode.PRIMARY, authData = authData)
+        Siwf.CreateSignInButton(mode = SiwfButtonMode.PRIMARY, authData = authData)
         // Dark Button
-        Liwl.CreateSignInButton(mode = LiwlButtonMode.DARK, authData = authData)
+        Siwf.CreateSignInButton(mode = SiwfButtonMode.DARK, authData = authData)
         // Light Button
-        Liwl.CreateSignInButton(mode = LiwlButtonMode.LIGHT, authData = authData)
+        Siwf.CreateSignInButton(mode = SiwfButtonMode.LIGHT, authData = authData)
     }
 }
 

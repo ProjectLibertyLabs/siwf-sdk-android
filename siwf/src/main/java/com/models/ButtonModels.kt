@@ -1,6 +1,6 @@
 package com.models
 
-enum class LiwlButtonMode {
+enum class SiwfButtonMode {
     PRIMARY,
     DARK,
     LIGHT
