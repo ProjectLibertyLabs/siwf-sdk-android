@@ -1,4 +1,4 @@
-package com.models
+package io.projectliberty.models
 
 enum class SiwfButtonMode {
     PRIMARY,

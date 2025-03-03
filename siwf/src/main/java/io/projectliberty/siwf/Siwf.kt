@@ -1,9 +1,9 @@
-package com.siwf
+package io.projectliberty.siwf
 
 import androidx.compose.runtime.Composable
-import com.models.GenerateAuthData
-import com.models.SiwfButtonMode
-import com.helpers.generateAuthenticationUrl
+import io.projectliberty.models.GenerateAuthData
+import io.projectliberty.models.SiwfButtonMode
+import io.projectliberty.helpers.generateAuthenticationUrl
 
 object Siwf {
     @Composable

@@ -1,8 +1,8 @@
-package com.helpers
+package io.projectliberty.helpers
 
 import android.util.Base64
-import com.models.GenerateAuthData
-import com.models.SiwfSignedRequest
+import io.projectliberty.models.GenerateAuthData
+import io.projectliberty.models.SiwfSignedRequest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.net.URL

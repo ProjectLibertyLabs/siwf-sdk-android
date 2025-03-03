@@ -1,4 +1,4 @@
-package com.siwf
+package io.projectliberty.siwf
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -31,8 +31,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helpers.fetchAssets
-import com.models.SiwfButtonMode
+import io.projectliberty.helpers.fetchAssets
+import io.projectliberty.models.SiwfButtonMode
 import java.net.URL
 
 @Composable

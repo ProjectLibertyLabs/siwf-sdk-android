@@ -1,4 +1,4 @@
-package com.helpers
+package io.projectliberty.helpers
 
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
