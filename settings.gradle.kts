@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Liwl"
-include(":liwl")
+rootProject.name = "Siwf"
+include(":siwf")
 include(":app")

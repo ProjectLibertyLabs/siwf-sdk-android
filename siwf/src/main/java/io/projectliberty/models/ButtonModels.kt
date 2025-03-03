@@ -1,6 +1,6 @@
-package com.models
+package io.projectliberty.models
 
-enum class LiwlButtonMode {
+enum class SiwfButtonMode {
     PRIMARY,
     DARK,
     LIGHT

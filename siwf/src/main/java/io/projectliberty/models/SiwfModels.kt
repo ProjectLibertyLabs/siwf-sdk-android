@@ -1,4 +1,4 @@
-package com.models
+package io.projectliberty.models
 
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package com
+package io
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

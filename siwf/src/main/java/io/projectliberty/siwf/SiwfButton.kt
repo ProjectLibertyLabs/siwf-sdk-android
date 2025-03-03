@@ -1,4 +1,4 @@
-package com.liwl
+package io.projectliberty.siwf
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -31,13 +31,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.helpers.fetchAssets
-import com.models.LiwlButtonMode
+import io.projectliberty.helpers.fetchAssets
+import io.projectliberty.models.SiwfButtonMode
 import java.net.URL
 
 @Composable
-fun LiwlButton(
-    mode: LiwlButtonMode = LiwlButtonMode.PRIMARY,
+fun SiwfButton(
+    mode: SiwfButtonMode = SiwfButtonMode.PRIMARY,
     authUrl: String,
 ) {
     var title by remember { mutableStateOf("Sign In") }
@@ -49,7 +49,7 @@ fun LiwlButton(
     val context = LocalContext.current
 
     val isValidUrl = try {
-        Log.e("LiwlButton", authUrl)
+        Log.e("SiwfButton", authUrl)
         URL(authUrl)
         true
     } catch (e: Exception) {
@@ -59,7 +59,7 @@ fun LiwlButton(
     LaunchedEffect(Unit) {
         val assets = fetchAssets()
         if (assets == null) {
-            Log.e("LiwlButton", "Failed to fetch assets")
+            Log.e("SiwfButton", "Failed to fetch assets")
             return@LaunchedEffect
         }
 
@@ -69,7 +69,7 @@ fun LiwlButton(
         val lightColor = assets.colors.light
 
         when (mode) {
-            LiwlButtonMode.PRIMARY -> {
+            SiwfButtonMode.PRIMARY -> {
                 backgroundColor = Color(android.graphics.Color.parseColor(primaryColor))
                 textColor = Color(android.graphics.Color.parseColor(lightColor))
                 borderColor = Color(android.graphics.Color.parseColor(primaryColor))
@@ -79,7 +79,7 @@ fun LiwlButton(
                         ?.asImageBitmap()
                 }
             }
-            LiwlButtonMode.DARK -> {
+            SiwfButtonMode.DARK -> {
                 backgroundColor = Color(android.graphics.Color.parseColor(darkColor))
                 textColor = Color(android.graphics.Color.parseColor(lightColor))
                 borderColor = Color(android.graphics.Color.parseColor(darkColor))
@@ -89,7 +89,7 @@ fun LiwlButton(
                         ?.asImageBitmap()
                 }
             }
-            LiwlButtonMode.LIGHT -> {
+            SiwfButtonMode.LIGHT -> {
                 backgroundColor = Color(android.graphics.Color.parseColor(lightColor))
                 textColor = Color(android.graphics.Color.parseColor(darkColor))
                 borderColor = Color(android.graphics.Color.parseColor(darkColor))
