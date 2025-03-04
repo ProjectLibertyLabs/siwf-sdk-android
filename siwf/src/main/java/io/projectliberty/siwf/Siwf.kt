@@ -8,14 +8,15 @@ import io.projectliberty.helpers.generateAuthenticationUrl
 object Siwf {
     @Composable
     fun CreateSignInButton(
-        mode: SiwfButtonMode,
-        authData: GenerateAuthData
+        mode: SiwfButtonMode = SiwfButtonMode.PRIMARY,
+        authData: GenerateAuthData? = null,
+        authEncodedRequest: String? = null
     ) {
-        val authUrl = generateAuthenticationUrl(authData)
+        val authUrl = generateAuthenticationUrl(authData, authEncodedRequest)
 
         SiwfButton(
             mode = mode,
-            authUrl = authUrl.toString(),
+            authUrl = authUrl,
         )
     }
 }

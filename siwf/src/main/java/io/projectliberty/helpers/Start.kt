@@ -1,5 +1,6 @@
 package io.projectliberty.helpers
 
+import android.net.Uri
 import android.util.Base64
 import io.projectliberty.models.GenerateAuthData
 import io.projectliberty.models.SiwfSignedRequest
@@ -48,21 +49,33 @@ fun buildUrlWithQuery(baseUrl: String, queryParams: Map<String, String>): URL? {
     }
 }
 
-fun generateAuthenticationUrl(authData: GenerateAuthData): URL? {
-    val (signedRequest, additionalCallbackUrlParams, options ) = authData
-    val encodedSignedRequest = encodeSignedRequest(signedRequest) ?: return null
-
-    val endpoint = parseEndpoint(options?.endpoint ?: "mainnet", EndpointPath.START)
-
-    // Build query parameters while excluding reserved keywords.
-    val queryItems = LinkedHashMap<String, String>()
-    additionalCallbackUrlParams.forEach { (key, value) ->
-        if (key.lowercase() != "signedrequest" && key.lowercase() != "authorizationcode") {
-            queryItems[key] = value
-        }
+fun generateAuthenticationUrl(
+    authData: GenerateAuthData?,
+    authEncodedRequest: String?
+): Uri? {
+    if (authData?.signedRequest == null && authEncodedRequest == null) {
+        println("Error: must pass a signed request or an encoded signed request")
+        return null
     }
-    // Ensure the signedRequest parameter is added last.
-    queryItems["signedRequest"] = encodedSignedRequest
 
-    return buildUrlWithQuery(endpoint, queryItems)
+    val encodedSignedRequest = authEncodedRequest ?: encodeSignedRequest(authData!!.signedRequest)
+
+    val endpoint = parseEndpoint(authData?.options?.endpoint ?: "mainnet", EndpointPath.START)
+
+    val uriBuilder = Uri.parse(endpoint).buildUpon()
+
+    // Filter out reserved query parameters
+    val queryItems = authData?.additionalCallbackUrlParams?.filterKeys { it != "signedRequest" && it != "authorizationCode" }
+        ?.map { Uri.encode(it.key) to Uri.encode(it.value) }
+        ?: emptyList()
+
+    // Add filtered query parameters
+    queryItems.forEach { (key, value) ->
+        uriBuilder.appendQueryParameter(key, value)
+    }
+
+    // Append signed request last
+    uriBuilder.appendQueryParameter("signedRequest", encodedSignedRequest)
+
+    return uriBuilder.build()
 }
