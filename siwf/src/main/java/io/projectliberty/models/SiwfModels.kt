@@ -32,33 +32,25 @@ data class SiwfRequestedSignature(
 )
 
 @Serializable
-enum class SiwfCredentialType {
-    @SerialName("single") SINGLE,
-    @SerialName("anyOf") ANY_OF
-}
+sealed class SiwfCredentialRequest
 
 @Serializable
-data class SiwfRequestedCredential(
-    val type: SiwfCredentialType,
-    val credential: SingleCredential? = null,
-    val credentials: AnyOfCredentials? = null
-)
+@SerialName("anyOfRequired")
+data class AnyOfRequired(
+    val anyOf: List<SiwfCredential>
+): SiwfCredentialRequest()
 
 @Serializable
-data class SingleCredential(
+@SerialName("credential")
+data class SiwfCredential(
     val type: String,
     val hash: List<String>
-)
-
-@Serializable
-data class AnyOfCredentials(
-    val anyOf: List<SingleCredential>
-)
+): SiwfCredentialRequest()
 
 @Serializable
 data class SiwfSignedRequest(
     val requestedSignatures: SiwfRequestedSignature,
-    val requestedCredentials: List<SiwfRequestedCredential>? = emptyList()
+    val requestedCredentials: List<SiwfCredentialRequest>? = emptyList()
 )
 
 data class SiwfOptions(

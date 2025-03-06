@@ -1,5 +1,7 @@
 package io.projectliberty.models
 
+import kotlinx.serialization.SerialName
+
 enum class SiwfButtonMode {
     PRIMARY,
     DARK,
@@ -13,9 +15,14 @@ data class GenerateAuthData(
 )
 
 sealed class SignedRequest {
+    @kotlinx.serialization.Serializable
+    @SerialName("encoded")
     data class SiwfEncodedSignedRequest(val encodedSignedRequest: String) : SignedRequest()
+
+    @kotlinx.serialization.Serializable
+    @SerialName("signed")
     data class SiwfSignedRequest(
-        val signature: SiwfRequestedSignature,
-        val credentials: List<SiwfRequestedCredential> = emptyList()
+        val requestedSignatures: SiwfRequestedSignature,
+        val requestedCredentials: List<SiwfCredentialRequest> = emptyList()
     ) : SignedRequest()
 }

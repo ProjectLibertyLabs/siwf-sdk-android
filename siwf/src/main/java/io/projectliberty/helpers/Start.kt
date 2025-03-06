@@ -43,8 +43,8 @@ fun generateAuthenticationUrl(
         is SignedRequest.SiwfEncodedSignedRequest -> authData.signedRequest.encodedSignedRequest
         is SignedRequest.SiwfSignedRequest -> encodeSignedRequest(
             SiwfSignedRequest(
-                requestedSignatures = authData.signedRequest.signature,
-                requestedCredentials = authData.signedRequest.credentials
+                requestedSignatures = authData.signedRequest.requestedSignatures,
+                requestedCredentials = authData.signedRequest.requestedCredentials
             )
         ) ?: return null
     }
