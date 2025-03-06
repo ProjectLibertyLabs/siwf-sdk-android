@@ -1,6 +1,6 @@
 package io.projectliberty.models
 
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 @Serializable
 data class SiwfPublicKey(
@@ -12,9 +12,9 @@ data class SiwfPublicKey(
 
 @Serializable
 data class SiwfSignature(
-    val encodedValue: String,
     val algo: String = "SR25519",
-    val encoding: String = "base16"
+    val encoding: String = "base16",
+    val encodedValue: String
 )
 
 @Serializable
@@ -32,23 +32,35 @@ data class SiwfRequestedSignature(
 )
 
 @Serializable
-data class AnyOfRequired(
-    val field: String // Example placeholder; update as needed
+enum class SiwfCredentialType {
+    @SerialName("single") SINGLE,
+    @SerialName("anyOf") ANY_OF
+}
+
+@Serializable
+data class SiwfRequestedCredential(
+    val type: SiwfCredentialType,
+    val credential: SingleCredential? = null,
+    val credentials: AnyOfCredentials? = null
 )
 
 @Serializable
-data class SiwfCredential(
-    val credentialId: String // Example placeholder; update as needed
+data class SingleCredential(
+    val type: String,
+    val hash: List<String>
+)
+
+@Serializable
+data class AnyOfCredentials(
+    val anyOf: List<SingleCredential>
 )
 
 @Serializable
 data class SiwfSignedRequest(
     val requestedSignatures: SiwfRequestedSignature,
-    val requestedCredentials: List<SiwfCredential>? = null
+    val requestedCredentials: List<SiwfRequestedCredential>? = emptyList()
 )
 
-@Serializable
 data class SiwfOptions(
-    var endpoint: String,
-    var loginMsgUri: String? = null
+    var endpoint: String
 )

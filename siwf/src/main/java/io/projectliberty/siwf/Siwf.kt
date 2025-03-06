@@ -9,10 +9,9 @@ object Siwf {
     @Composable
     fun CreateSignInButton(
         mode: SiwfButtonMode = SiwfButtonMode.PRIMARY,
-        authData: GenerateAuthData? = null,
-        authEncodedRequest: String? = null
+        authData: GenerateAuthData,
     ) {
-        val authUrl = generateAuthenticationUrl(authData, authEncodedRequest)
+        val authUrl = generateAuthenticationUrl(authData)
 
         SiwfButton(
             mode = mode,
