@@ -23,6 +23,6 @@ sealed class SignedRequest {
     @SerialName("signed")
     data class SiwfSignedRequest(
         val requestedSignatures: SiwfRequestedSignature,
-        val requestedCredentials: List<SiwfCredentialRequest> = emptyList()
+        val requestedCredentials: List<SiwfRequestedCredential> = emptyList()
     ) : SignedRequest()
 }

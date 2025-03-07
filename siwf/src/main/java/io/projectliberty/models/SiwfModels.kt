@@ -1,6 +1,13 @@
 package io.projectliberty.models
 
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonEncoder
+import kotlinx.serialization.json.jsonObject
 
 @Serializable
 data class SiwfPublicKey(
@@ -31,26 +38,52 @@ data class SiwfRequestedSignature(
     val payload: SiwfPayload
 )
 
-@Serializable
-sealed class SiwfCredentialRequest
+@Serializable(with = RequestedCredentialTypeSerializer::class)
+sealed class SiwfRequestedCredential
 
 @Serializable
-@SerialName("anyOfRequired")
-data class AnyOfRequired(
-    val anyOf: List<SiwfCredential>
-): SiwfCredentialRequest()
-
-@Serializable
-@SerialName("credential")
 data class SiwfCredential(
-    val type: String,
-    val hash: List<String>
-): SiwfCredentialRequest()
+    @SerialName("type") val type: String,
+    @SerialName("hash") val hash: List<String>
+) : SiwfRequestedCredential()
+
+@Serializable
+data class AnyOfRequired(
+    @SerialName("anyOf") val anyOf: List<SiwfCredential>
+) : SiwfRequestedCredential()
+
+object RequestedCredentialTypeSerializer : KSerializer<SiwfRequestedCredential> {
+    override val descriptor: SerialDescriptor =
+        buildClassSerialDescriptor("RequestedCredentialType")
+
+    override fun serialize(encoder: Encoder, value: SiwfRequestedCredential) {
+        val jsonEncoder = encoder as? JsonEncoder
+            ?: throw SerializationException("Expected JsonEncoder")
+
+        val jsonElement = when (value) {
+            is SiwfCredential -> jsonEncoder.json.encodeToJsonElement(SiwfCredential.serializer(), value)
+            is AnyOfRequired -> jsonEncoder.json.encodeToJsonElement(AnyOfRequired.serializer(), value)
+        }
+        jsonEncoder.encodeJsonElement(jsonElement)
+    }
+
+    override fun deserialize(decoder: Decoder): SiwfRequestedCredential {
+        val jsonDecoder = decoder as? JsonDecoder
+            ?: throw SerializationException("Expected JsonDecoder")
+        val jsonObject = jsonDecoder.decodeJsonElement().jsonObject
+
+        return if ("anyOf" in jsonObject) {
+            jsonDecoder.json.decodeFromJsonElement(AnyOfRequired.serializer(), jsonObject)
+        } else {
+            jsonDecoder.json.decodeFromJsonElement(SiwfCredential.serializer(), jsonObject)
+        }
+    }
+}
 
 @Serializable
 data class SiwfSignedRequest(
     val requestedSignatures: SiwfRequestedSignature,
-    val requestedCredentials: List<SiwfCredentialRequest>? = emptyList()
+    val requestedCredentials: List<SiwfRequestedCredential> = emptyList()
 )
 
 data class SiwfOptions(
