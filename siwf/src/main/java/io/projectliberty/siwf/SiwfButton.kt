@@ -33,12 +33,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.projectliberty.helpers.fetchAssets
 import io.projectliberty.models.SiwfButtonMode
-import java.net.URL
 
 @Composable
 fun SiwfButton(
-    mode: SiwfButtonMode = SiwfButtonMode.PRIMARY,
-    authUrl: String,
+    mode: SiwfButtonMode,
+    authUrl: Uri?,
 ) {
     var title by remember { mutableStateOf("Sign In") }
     var backgroundColor by remember { mutableStateOf(Color.Gray) }
@@ -47,14 +46,6 @@ fun SiwfButton(
     var logoImage by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
 
     val context = LocalContext.current
-
-    val isValidUrl = try {
-        Log.e("SiwfButton", authUrl)
-        URL(authUrl)
-        true
-    } catch (e: Exception) {
-        false
-    }
 
     LaunchedEffect(Unit) {
         val assets = fetchAssets()
@@ -105,7 +96,7 @@ fun SiwfButton(
     // Button UI: the button is disabled if authUrl is not valid.
     Button(
         onClick = {
-            openUrl(context, authUrl)
+            if (authUrl.toString().isNotBlank()) openUrl(context, authUrl!!)
         },
         colors = ButtonDefaults.buttonColors(backgroundColor),
         shape = RoundedCornerShape(24.dp),
@@ -113,7 +104,7 @@ fun SiwfButton(
         modifier = Modifier
             .padding(8.dp)
             .height(50.dp),
-        enabled = isValidUrl
+        enabled = authUrl.toString().isNotBlank()
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -133,8 +124,6 @@ fun SiwfButton(
     }
 }
 
-private fun openUrl(context: Context, url: String) {
-    if (url.isNotBlank()) {
-        CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(url))
-    }
+private fun openUrl(context: Context, url: Uri) {
+    CustomTabsIntent.Builder().build().launchUrl(context, url)
 }
