@@ -1,5 +1,9 @@
 package com.example.app
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,6 +14,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import io.projectliberty.models.AnyOfRequired
 import io.projectliberty.siwf.Siwf
 import io.projectliberty.models.GenerateAuthData
@@ -63,6 +69,22 @@ fun ContentView() {
                 endpoint = "testnet"
             )
         )
+
+//    Receiver for callback
+    val context = LocalContext.current
+    val filter = IntentFilter("com.example.siwf.AUTH_RESULT")
+    val receiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val authCode = intent?.getStringExtra("authorizationCode")
+            Log.d("HostApp", "Received Auth Code: $authCode")
+        }
+    }
+    ContextCompat.registerReceiver(
+        context,
+        receiver,
+        filter,
+        ContextCompat.RECEIVER_NOT_EXPORTED
+    )
 
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
