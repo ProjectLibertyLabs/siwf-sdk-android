@@ -12,12 +12,7 @@ object Siwf {
         mode: SiwfButtonMode = SiwfButtonMode.PRIMARY,
         authData: GenerateAuthData,
     ) {
-        Log.e("DEBUGGGGG*** in Siwf", authData.toString())
-
         val authUrl = generateAuthenticationUrl(authData)
-
-        Log.e("DEBUGGGGG*** in Siwf", authUrl.toString())
-
         SiwfButton(
             mode = mode,
             authUrl = authUrl,

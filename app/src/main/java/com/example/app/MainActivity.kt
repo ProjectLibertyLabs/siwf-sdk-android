@@ -53,20 +53,16 @@ fun ContentView() {
         )
     )
 
-    Log.e("DEBUGGGGG***", exampleRequest.toString())
-
     val encodedSignedRequest = SignedRequest.SiwfEncodedSignedRequest(
         encodedSignedRequest = "eyJyZXF1ZXN0ZWRTaWduYXR1cmVzIjp7InB1YmxpY0tleSI6eyJlbmNvZGVkVmFsdWUiOiJmNmNuM0NpVlFqRGpQRmhTekh4WkM5NFRKZzNBNU1ZNlFCTkpSZXpnQ21TVVNqdzdSIiwiZW5jb2RpbmciOiJiYXNlNTgiLCJmb3JtYXQiOiJzczU4IiwidHlwZSI6IlNyMjU1MTkifSwic2lnbmF0dXJlIjp7ImFsZ28iOiJTUjI1NTE5IiwiZW5jb2RpbmciOiJiYXNlMTYiLCJlbmNvZGVkVmFsdWUiOiIweDUyZWVjMjE0NWI1ZTJlYzA5MmE3NTkyYmEwYWM2NjliOWEwNWJlZDQzYzkxNDRjZGVlNWIzYTlmNzI3ZmRlMzQzODg4YTZlY2NhYzY4NDgzNjJmNWJkNmVhNDc5MmE3YmYxNjBkMDdlMzFlOWRjZDk2MDBhYjQ0MzNhNGQ3ODhiIn0sInBheWxvYWQiOnsiY2FsbGJhY2siOiJodHRwOi8vbG9jYWxob3N0OjMwMDAvbG9naW4vY2FsbGJhY2siLCJwZXJtaXNzaW9ucyI6WzcsOCw5LDEwXX19LCJyZXF1ZXN0ZWRDcmVkZW50aWFscyI6W3sidHlwZSI6IlZlcmlmaWVkR3JhcGhLZXlDcmVkZW50aWFsIiwiaGFzaCI6WyJiY2lxbWR2bXhkNTR6dmU1a2lmeWNnc2R0b2FoczVlY2Y0aGFsMnRzM2VleGtnb2N5YzVvY2EyeSJdfSx7ImFueU9mIjpbeyJ0eXBlIjoiVmVyaWZpZWRFbWFpbEFkZHJlc3NDcmVkZW50aWFsIiwiaGFzaCI6WyJiY2lxZTRxb2N6aGZ0aWNpNGR6ZnZmYmVsN2ZvNGg0c3I1Z3JjbzNvb3Z3eWs2eTR5bmY0NHRzaSJdfSx7InR5cGUiOiJWZXJpZmllZFBob25lTnVtYmVyQ3JlZGVudGlhbCIsImhhc2giOlsiYmNpcWpzcG5id3BjM3dqeDRmZXdjZWs1ZGF5c2RqcGJmNXhqaW16NXdudTV1ajdlM3Z1MnV3bnEiXX1dfV19")
 
     val authData = GenerateAuthData(
-            signedRequest = exampleRequest,
+            signedRequest = encodedSignedRequest,
             additionalCallbackUrlParams = emptyMap(),
             options = SiwfOptions(
                 endpoint = "testnet"
             )
         )
-
-    Log.e("DEBUGGGGG***", authData.toString())
 
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
