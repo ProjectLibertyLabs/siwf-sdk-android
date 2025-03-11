@@ -1,6 +1,7 @@
 package io.projectliberty.siwf
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.browser.customtabs.CustomTabsIntent
 import android.net.Uri
@@ -37,7 +38,7 @@ import io.projectliberty.models.SiwfButtonMode
 @Composable
 fun SiwfButton(
     mode: SiwfButtonMode,
-    authUrl: Uri?,
+    authUrl: Uri,
 ) {
     var title by remember { mutableStateOf("Sign In") }
     var backgroundColor by remember { mutableStateOf(Color.Gray) }
@@ -95,8 +96,18 @@ fun SiwfButton(
 
     // Button UI: the button is disabled if authUrl is not valid.
     Button(
-        onClick = {
-            if (authUrl.toString().isNotBlank()) openUrl(context, authUrl!!)
+//        onClick = { openUrl(context, authUrl) },
+        onClick = { try {
+            Log.d("SiwfButton", "Creating new tab.....")
+            val builder = CustomTabsIntent.Builder()
+            val customTabsIntent = builder.build()
+            customTabsIntent.launchUrl(context, Uri.parse("http://localhost:3000/login/callback?authorizationCode=29e828c5-73db-47ed-85ed-835b9278c1b6"))
+            Log.d("SiwfButton", "Created new tab.")
+        } catch (e: Exception) {
+            Log.e("SiwfButton", "Error creating new tab.")
+            val browserIntent = Intent(Intent.ACTION_VIEW, authUrl)
+            context.startActivity(browserIntent)
+        }
         },
         colors = ButtonDefaults.buttonColors(backgroundColor),
         shape = RoundedCornerShape(24.dp),

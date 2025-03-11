@@ -1,4 +1,4 @@
-package io.projectliberty.helpers
+package com.example.app
 
 import android.content.Intent
 import android.net.Uri

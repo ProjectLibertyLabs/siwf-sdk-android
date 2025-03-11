@@ -38,7 +38,7 @@ fun parseEndpoint(input: String, path: EndpointPath): String {
 
 fun generateAuthenticationUrl(
     authData: GenerateAuthData
-): Uri? {
+): Uri {
     val encodedSignedRequest = when (authData.signedRequest) {
         is SignedRequest.SiwfEncodedSignedRequest -> authData.signedRequest.encodedSignedRequest
         is SignedRequest.SiwfSignedRequest -> encodeSignedRequest(
@@ -46,7 +46,7 @@ fun generateAuthenticationUrl(
                 requestedSignatures = authData.signedRequest.requestedSignatures,
                 requestedCredentials = authData.signedRequest.requestedCredentials
             )
-        ) ?: return null
+        ) ?: throw Exception("Error encoding request.")
     }
 
     val endpoint = parseEndpoint(authData.options?.endpoint ?: "mainnet", EndpointPath.START)
