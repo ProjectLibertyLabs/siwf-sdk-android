@@ -26,8 +26,10 @@ class AuthCallbackActivity : ComponentActivity() {
             if (authCode != null) {
                 Log.d("AuthCallback", "Auth Code: $authCode")
 
-                val broadcastIntent = Intent("com.example.siwf.AUTH_RESULT")
-                broadcastIntent.putExtra("authorizationCode", authCode)
+                val broadcastIntent = Intent("com.example.siwf.AUTH_RESULT").apply {
+                    setPackage(packageName)
+                    putExtra("authorizationCode", authCode)
+                }
                 sendBroadcast(broadcastIntent)
             }
         }
