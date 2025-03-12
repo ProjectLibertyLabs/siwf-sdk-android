@@ -1,6 +1,5 @@
 package io.projectliberty.siwf
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import io.projectliberty.models.GenerateAuthData
 import io.projectliberty.models.SiwfButtonMode
