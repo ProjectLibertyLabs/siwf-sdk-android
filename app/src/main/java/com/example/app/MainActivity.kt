@@ -82,11 +82,11 @@ fun ContentView() {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.padding(16.dp)
     ) {
-        // Primary Button
+        // Primary Button with encoded data
         Siwf.CreateSignInButton(authData = authDataEncoded)
-        // Dark Button
+        // Dark Button with encoded data
         Siwf.CreateSignInButton(mode = SiwfButtonMode.DARK, authData = authDataEncoded)
-        // Light Button
+        // Light Button with non-encoded data
         Siwf.CreateSignInButton(mode = SiwfButtonMode.LIGHT, authData = authData)
     }
 }
