@@ -33,9 +33,9 @@ fun ContentView() {
     val exampleRequest = SignedRequest.SiwfSignedRequest(
         requestedSignatures = SiwfRequestedSignature(
             publicKey = SiwfPublicKey(encodedValue = "f6cn3CiVQjDjPFhSzHxZC94TJg3A5MY6QBNJRezgCmSUSjw7R"),
-            signature = SiwfSignature(encodedValue = "0x52eec2145b5e2ec092a7592ba0ac669b9a05bed43c9144cdee5b3a9f727fde343888a6eccac6848362f5bd6ea4792a7bf160d07e31e9dcd9600ab4433a4d788b"),
+            signature = SiwfSignature(encodedValue = "0xceb09d9c50b66edfd4fea0ec2515754857b500ba1af4725318cc1a7fc15aef08e8df2c8a1560683f3bce0630aaee159648a305f452de751978a47da568235e83"),
             payload = SiwfPayload(
-                callback = "http://localhost:3000/login/callback",
+                callback = "siwfdemoapp://login",
                 permissions = listOf(7, 8, 9, 10)
             )
         ),
@@ -70,14 +70,22 @@ fun ContentView() {
             )
         )
 
+    val authDataEncoded = GenerateAuthData(
+        encodedSignedRequest,
+        additionalCallbackUrlParams = emptyMap(),
+        options = SiwfOptions(
+            endpoint = "testnet"
+        )
+    )
+
     Column(
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.padding(16.dp)
     ) {
         // Primary Button
-        Siwf.CreateSignInButton(authData = authData)
+        Siwf.CreateSignInButton(authData = authDataEncoded)
         // Dark Button
-        Siwf.CreateSignInButton(mode = SiwfButtonMode.DARK, authData = authData)
+        Siwf.CreateSignInButton(mode = SiwfButtonMode.DARK, authData = authDataEncoded)
         // Light Button
         Siwf.CreateSignInButton(mode = SiwfButtonMode.LIGHT, authData = authData)
     }

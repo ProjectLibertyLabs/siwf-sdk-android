@@ -96,12 +96,9 @@ fun SiwfButton(
 
     // Button UI: the button is disabled if authUrl is not valid.
     Button(
-//        onClick = { openUrl(context, authUrl) },
         onClick = { try {
             Log.d("SiwfButton", "Creating new tab.....")
-            val builder = CustomTabsIntent.Builder()
-            val customTabsIntent = builder.build()
-            customTabsIntent.launchUrl(context, Uri.parse("http://localhost:3000/login/callback?authorizationCode=29e828c5-73db-47ed-85ed-835b9278c1b6"))
+            openUrl(context, authUrl)
             Log.d("SiwfButton", "Created new tab.")
         } catch (e: Exception) {
             Log.e("SiwfButton", "Error creating new tab.")
@@ -136,5 +133,8 @@ fun SiwfButton(
 }
 
 private fun openUrl(context: Context, url: Uri) {
-    CustomTabsIntent.Builder().build().launchUrl(context, url)
+    val ct = CustomTabsIntent.Builder().build()
+    ct.intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+    ct.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    ct.launchUrl(context, url)
 }
