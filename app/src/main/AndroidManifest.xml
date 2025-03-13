@@ -23,5 +23,32 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="io.projectliberty.helpers.AuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+
+            <!-- HTTP Callback Example. Requires a Verified App Link: https://developer.android.com/training/app-links/verify-android-applinks -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="http"
+                    android:host="localhost"
+                    android:port="3000"
+                    android:path="/login/callback" />
+            </intent-filter>
+
+            <!-- Custom Schema Support Example -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="siwfdemoapp"
+                    android:host="login" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>
