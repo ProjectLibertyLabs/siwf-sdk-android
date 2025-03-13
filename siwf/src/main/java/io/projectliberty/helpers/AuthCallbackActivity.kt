@@ -26,7 +26,7 @@ class AuthCallbackActivity : ComponentActivity() {
             if (authCode != null) {
                 Log.d("AuthCallback", "Auth Code: $authCode")
 
-                val broadcastIntent = Intent("com.example.siwf.AUTH_RESULT").apply {
+                val broadcastIntent = Intent("io.projectliberty.helpers.AUTH_RESULT").apply {
                     setPackage(packageName)
                     putExtra("authorizationCode", authCode)
                 }
