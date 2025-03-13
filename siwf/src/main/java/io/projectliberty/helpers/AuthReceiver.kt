@@ -1,4 +1,4 @@
-package com.example.app
+package io.projectliberty.helpers
 
 import android.content.BroadcastReceiver
 import android.content.Context

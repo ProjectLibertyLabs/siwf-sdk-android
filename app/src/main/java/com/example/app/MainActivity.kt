@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var receivedAuthCode by remember { mutableStateOf<String?>(null) }
-            val filter = IntentFilter("com.example.siwf.AUTH_RESULT")
+            val filter = IntentFilter("io.projectliberty.helpers.AUTH_RESULT")
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
                     receivedAuthCode = intent?.getStringExtra("authorizationCode")

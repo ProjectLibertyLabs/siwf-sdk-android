@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name="com.example.app.AuthCallbackActivity"
+            android:name="io.projectliberty.helpers.AuthCallbackActivity"
             android:exported="true"
             android:launchMode="singleTask">
 
@@ -49,8 +49,6 @@
                     android:scheme="siwfdemoapp"
                     android:host="login" />
             </intent-filter>
-
         </activity>
-
     </application>
 </manifest>
