@@ -2,6 +2,7 @@ package com.example.app
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -46,6 +47,12 @@ fun ContentView(authenticationCode: String?, onDismiss: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier.padding(16.dp)
     ) {
+        Text(
+            text = "SIWF Demo App",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.fillMaxWidth()
+        )
+
         // Primary Sign-In Button (Default)
         Siwf.CreateSignInButton(authRequest = authRequest)
 
