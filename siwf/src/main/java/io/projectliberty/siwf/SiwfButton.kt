@@ -7,32 +7,33 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.projectliberty.helpers.decodeBase64Image
+import io.projectliberty.helpers.fallbackOpenUrl
 import io.projectliberty.helpers.fetchAssets
 import io.projectliberty.helpers.getButtonStyle
 import io.projectliberty.helpers.getLocalAssets
+import io.projectliberty.helpers.openUrl
 import io.projectliberty.models.SiwfButtonMode
 
+private const val TAG = "SiwfButton"
+
+/**
+ * A customizable Sign-In With Frequency (SIWF) button.
+ *
+ * @param mode The visual style of the button (Primary, Dark, Light).
+ * @param authUrl The authentication URL that the button triggers.
+ */
 @Composable
 fun SiwfButton(
     mode: SiwfButtonMode,
@@ -45,6 +46,7 @@ fun SiwfButton(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+        Log.d(TAG, "⏳ Fetching SIWF assets...")
         val assets = fetchAssets()
         if (assets != null) {
             // If we get remote remote assets, set button styles to latest
@@ -55,15 +57,14 @@ fun SiwfButton(
 
     // Button UI: the button is disabled if authUrl is not valid.
     Button(
-        onClick = { try {
-            Log.d("SiwfButton", "Creating new tab.....")
-            openUrl(context, authUrl)
-            Log.d("SiwfButton", "Created new tab.")
-        } catch (e: Exception) {
-            Log.e("SiwfButton", "Error creating new tab.")
-            val browserIntent = Intent(Intent.ACTION_VIEW, authUrl)
-            context.startActivity(browserIntent)
-        }
+        onClick = {
+            Log.d(TAG, "🔗 Opening authentication URL: $authUrl")
+            try {
+                openUrl(context, authUrl)
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Error opening authentication URL: ${e.localizedMessage}")
+                fallbackOpenUrl(context, authUrl)
+            }
         },
         colors = ButtonDefaults.buttonColors(buttonStyle.backgroundColor),
         shape = RoundedCornerShape(24.dp),
@@ -89,11 +90,4 @@ fun SiwfButton(
             Text(text = buttonStyle.title, fontWeight = FontWeight.Bold, color = buttonStyle.textColor)
         }
     }
-}
-
-private fun openUrl(context: Context, url: Uri) {
-    val ct = CustomTabsIntent.Builder().build()
-    ct.intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-    ct.intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    ct.launchUrl(context, url)
 }

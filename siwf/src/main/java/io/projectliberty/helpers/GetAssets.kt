@@ -8,6 +8,8 @@ import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
 
+private const val TAG = "GetAssets"
+
 @Serializable
 data class Assets(
     val colors: Colors,
@@ -34,7 +36,15 @@ data class Images(
     val logoDark: String
 )
 
+/**
+ * Fetches the assets JSON from the remote server.
+ * On success, returns remote Assets.
+ * On fail, returns local Assets.
+ */
 suspend fun fetchAssets(): Assets? = withContext(Dispatchers.IO) {
+    val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
+    Log.i(TAG, "Fetching assets from: $urlString")
+
     try {
         val remoteAssets = getRemoteAssets()
         if (remoteAssets != null) return@withContext remoteAssets
