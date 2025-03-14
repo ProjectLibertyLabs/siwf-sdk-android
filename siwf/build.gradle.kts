@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.siwf"
+    namespace = "io.projectliberty.siwf"
     compileSdk = 34
 
     defaultConfig {

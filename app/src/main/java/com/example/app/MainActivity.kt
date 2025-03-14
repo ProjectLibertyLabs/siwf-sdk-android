@@ -20,15 +20,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            var authenticationCode by remember { mutableStateOf<String?>(null) }
+            var authorizationCode by remember { mutableStateOf<String?>(null) }
 
             // Broadcast Receiver to listen for authentication results
             val authReceiver = remember {
                 object : BroadcastReceiver() {
                     override fun onReceive(context: Context?, intent: Intent?) {
                         val receivedCode = intent?.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
-                        authenticationCode = receivedCode
-                        Log.d(TAG, "✅ Authentication code received: $receivedCode")
+                        authorizationCode = receivedCode
+                        Log.d(TAG, "✅ Authorization code received: $receivedCode")
                     }
                 }
             }
@@ -46,8 +46,8 @@ class MainActivity : ComponentActivity() {
             // UI Content
             Surface {
                 ContentView(
-                    authenticationCode = authenticationCode,
-                    onDismiss = { authenticationCode = null }
+                    authorizationCode = authorizationCode,
+                    onDismiss = { authorizationCode = null }
                 )
             }
 
