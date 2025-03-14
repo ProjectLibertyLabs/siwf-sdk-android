@@ -38,11 +38,10 @@ suspend fun fetchAssets(): Assets? = withContext(Dispatchers.IO) {
     try {
         val remoteAssets = getRemoteAssets()
         if (remoteAssets != null) return@withContext remoteAssets
-        return@withContext getLocalAssets()
     } catch (e: Exception) {
         Log.e("fetchAssets", "Error fetching remote assets: $e")
-        null
     }
+    return@withContext null
 }
 
 private fun getRemoteAssets(): Assets? {
