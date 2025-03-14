@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Siwf"
+rootProject.name = "SIWF"
 include(":siwf")
 include(":app")
