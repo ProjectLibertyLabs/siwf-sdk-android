@@ -2,10 +2,8 @@ package io.projectliberty.siwf
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import androidx.browser.customtabs.CustomTabsIntent
 import android.net.Uri
-import android.util.Base64
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -26,13 +24,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.projectliberty.helpers.fetchAssets
+import io.projectliberty.helpers.getButtonStyle
+import io.projectliberty.helpers.getLocalAssets
 import io.projectliberty.models.SiwfButtonMode
 
 @Composable
@@ -40,57 +38,18 @@ fun SiwfButton(
     mode: SiwfButtonMode,
     authUrl: Uri,
 ) {
-    var title by remember { mutableStateOf("Sign In") }
-    var backgroundColor by remember { mutableStateOf(Color.Gray) }
-    var textColor by remember { mutableStateOf(Color.White) }
-    var borderColor by remember { mutableStateOf(Color.Gray) }
-    var logoImage by remember { mutableStateOf<androidx.compose.ui.graphics.ImageBitmap?>(null) }
+    val localAssets = getLocalAssets()
+    // Set default button styles to locally saved assets
+    var buttonStyle by remember { mutableStateOf(getButtonStyle(mode, localAssets)) }
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         val assets = fetchAssets()
-        if (assets == null) {
-            Log.e("SiwfButton", "Failed to fetch assets")
+        if (assets != null) {
+            // If we get remote remote assets, set button styles to latest
+            buttonStyle = getButtonStyle(mode, assets)
             return@LaunchedEffect
-        }
-
-        title = assets.content.title
-        val primaryColor = assets.colors.primary
-        val darkColor = assets.colors.dark
-        val lightColor = assets.colors.light
-
-        when (mode) {
-            SiwfButtonMode.PRIMARY -> {
-                backgroundColor = Color(android.graphics.Color.parseColor(primaryColor))
-                textColor = Color(android.graphics.Color.parseColor(lightColor))
-                borderColor = Color(android.graphics.Color.parseColor(primaryColor))
-                assets.images.logoPrimary.let { logoBase64 ->
-                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                    logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        ?.asImageBitmap()
-                }
-            }
-            SiwfButtonMode.DARK -> {
-                backgroundColor = Color(android.graphics.Color.parseColor(darkColor))
-                textColor = Color(android.graphics.Color.parseColor(lightColor))
-                borderColor = Color(android.graphics.Color.parseColor(darkColor))
-                assets.images.logoLight.let { logoBase64 ->
-                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                    logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        ?.asImageBitmap()
-                }
-            }
-            SiwfButtonMode.LIGHT -> {
-                backgroundColor = Color(android.graphics.Color.parseColor(lightColor))
-                textColor = Color(android.graphics.Color.parseColor(darkColor))
-                borderColor = Color(android.graphics.Color.parseColor(darkColor))
-                assets.images.logoDark.let { logoBase64 ->
-                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                    logoImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        ?.asImageBitmap()
-                }
-            }
         }
     }
 
@@ -106,9 +65,9 @@ fun SiwfButton(
             context.startActivity(browserIntent)
         }
         },
-        colors = ButtonDefaults.buttonColors(backgroundColor),
+        colors = ButtonDefaults.buttonColors(buttonStyle.backgroundColor),
         shape = RoundedCornerShape(24.dp),
-        border = BorderStroke(2.dp, borderColor),
+        border = BorderStroke(2.dp, buttonStyle.borderColor),
         modifier = Modifier
             .padding(8.dp)
             .height(50.dp),
@@ -118,16 +77,16 @@ fun SiwfButton(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (logoImage != null) {
+            if (buttonStyle.logoImage != null) {
                 Image(
-                    bitmap = logoImage!!,
+                    bitmap = buttonStyle.logoImage!!,
                     contentDescription = "Logo",
                     modifier = Modifier.size(33.dp)
                 )
             } else {
                 Text("🔄", fontSize = 24.sp)
             }
-            Text(text = title, fontWeight = FontWeight.Bold, color = textColor)
+            Text(text = buttonStyle.title, fontWeight = FontWeight.Bold, color = buttonStyle.textColor)
         }
     }
 }
