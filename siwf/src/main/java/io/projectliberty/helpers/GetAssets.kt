@@ -36,25 +36,7 @@ data class Images(
     val logoDark: String
 )
 
-/**
- * Fetches the assets JSON from the remote server.
- * On success, returns remote Assets.
- * On fail, returns local Assets.
- */
-suspend fun fetchAssets(): Assets? = withContext(Dispatchers.IO) {
-    val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
-    Log.i(TAG, "Fetching assets from: $urlString")
-
-    try {
-        val remoteAssets = getRemoteAssets()
-        if (remoteAssets != null) return@withContext remoteAssets
-    } catch (e: Exception) {
-        Log.e("fetchAssets", "Error fetching remote assets: $e")
-    }
-    return@withContext null
-}
-
-private fun getRemoteAssets(): Assets? {
+fun getRemoteAssets(): Assets? {
     val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
     val url = URL(urlString)
     val connection = url.openConnection() as HttpURLConnection
