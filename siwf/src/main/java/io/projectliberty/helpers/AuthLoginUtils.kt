@@ -8,7 +8,7 @@ import io.projectliberty.models.SignedRequest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-private const val TAG = "AuthLoginUtils"
+private const val TAG = "SIWF.AuthLoginUtils"
 
 enum class AuthEndpoint(val path: String) {
     START("/start"),

@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 
-private const val TAG = "AuthReceiver"
+private const val TAG = "SIWF.AuthReceiver"
 
 class AuthReceiver(private val onAuthReceived: (String?) -> Unit) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

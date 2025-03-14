@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import java.net.HttpURLConnection
 import java.net.URL
 
-private const val TAG = "GetAssets"
+private const val TAG = "SIWF.GetAssets"
 
 @Serializable
 data class Assets(

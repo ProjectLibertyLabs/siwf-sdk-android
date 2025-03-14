@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 
-private const val TAG = "SiwfAssetsLoader"
+private const val TAG = "SIWF.SiwfAssetsLoader"
 
 /**
  * Decodes a Base64-encoded image string into an ImageBitmap.

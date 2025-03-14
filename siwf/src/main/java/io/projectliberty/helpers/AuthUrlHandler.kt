@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import android.util.Log
 
-private const val TAG = "SiwfUrlHandler"
+private const val TAG = "SIWF.SiwfUrlHandler"
 
 /**
  * Opens a given URL using Chrome Custom Tabs.

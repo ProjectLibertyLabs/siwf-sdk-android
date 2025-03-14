@@ -13,7 +13,7 @@ import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import io.projectliberty.helpers.AuthConstants
 
-private const val TAG = "MainActivity"
+private const val TAG = "SIWF.MainActivity"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

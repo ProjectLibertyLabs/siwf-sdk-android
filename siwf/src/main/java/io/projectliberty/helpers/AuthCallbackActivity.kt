@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 
-private const val TAG = "AuthCallbackActivity"
+private const val TAG = "SIWF.AuthCallbackActivity"
 
 class AuthCallbackActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

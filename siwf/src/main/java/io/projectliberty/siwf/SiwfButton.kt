@@ -1,8 +1,5 @@
 package io.projectliberty.siwf
 
-import android.content.Context
-import android.content.Intent
-import androidx.browser.customtabs.CustomTabsIntent
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -13,12 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.projectliberty.helpers.decodeBase64Image
 import io.projectliberty.helpers.fallbackOpenUrl
 import io.projectliberty.helpers.fetchAssets
 import io.projectliberty.helpers.getButtonStyle
@@ -26,7 +21,7 @@ import io.projectliberty.helpers.getLocalAssets
 import io.projectliberty.helpers.openUrl
 import io.projectliberty.models.SiwfButtonMode
 
-private const val TAG = "SiwfButton"
+private const val TAG = "SIWF.SiwfButton"
 
 /**
  * A customizable Sign-In With Frequency (SIWF) button.
