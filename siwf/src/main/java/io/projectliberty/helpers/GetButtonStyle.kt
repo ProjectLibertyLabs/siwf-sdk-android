@@ -1,9 +1,6 @@
 package io.projectliberty.helpers
 
-import android.graphics.BitmapFactory
-import android.util.Base64
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import io.projectliberty.models.SiwfButtonMode
 
 data class ButtonStyles(
@@ -28,11 +25,7 @@ fun getButtonStyle(mode: SiwfButtonMode, assets: Assets): ButtonStyles {
                 backgroundColor = Color(android.graphics.Color.parseColor(primaryColor)),
                 textColor = Color(android.graphics.Color.parseColor(lightColor)),
                 borderColor = Color(android.graphics.Color.parseColor(primaryColor)),
-                logoImage = assets.images.logoPrimary.let { logoBase64 ->
-                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        ?.asImageBitmap()
-                }
+                logoImage = decodeBase64Image(assets.images.logoPrimary)
             )
         }
 
@@ -42,11 +35,7 @@ fun getButtonStyle(mode: SiwfButtonMode, assets: Assets): ButtonStyles {
                 backgroundColor = Color(android.graphics.Color.parseColor(darkColor)),
                 textColor = Color(android.graphics.Color.parseColor(lightColor)),
                 borderColor = Color(android.graphics.Color.parseColor(darkColor)),
-                logoImage = assets.images.logoLight.let { logoBase64 ->
-                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        ?.asImageBitmap()
-                }
+                logoImage = decodeBase64Image(assets.images.logoLight)
             )
         }
 
@@ -56,11 +45,7 @@ fun getButtonStyle(mode: SiwfButtonMode, assets: Assets): ButtonStyles {
                 backgroundColor = Color(android.graphics.Color.parseColor(lightColor)),
                 textColor = Color(android.graphics.Color.parseColor(darkColor)),
                 borderColor = Color(android.graphics.Color.parseColor(darkColor)),
-                logoImage = assets.images.logoDark.let { logoBase64 ->
-                    val imageBytes = Base64.decode(logoBase64, Base64.DEFAULT)
-                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        ?.asImageBitmap()
-                }
+                logoImage = decodeBase64Image(assets.images.logoDark)
             )
         }
     }

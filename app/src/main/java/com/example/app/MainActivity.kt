@@ -9,43 +9,54 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
+import io.projectliberty.helpers.AuthConstants
+
+private const val TAG = "SIWF.MainActivity"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            var receivedAuthCode by remember { mutableStateOf<String?>(null) }
-            val filter = IntentFilter("io.projectliberty.helpers.AUTH_RESULT")
-            val receiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context?, intent: Intent?) {
-                    receivedAuthCode = intent?.getStringExtra("authorizationCode")
-                    Log.d("HostApp", "✅ Received Auth Code: $receivedAuthCode")
+            var authenticationCode by remember { mutableStateOf<String?>(null) }
+
+            // Broadcast Receiver to listen for authentication results
+            val authReceiver = remember {
+                object : BroadcastReceiver() {
+                    override fun onReceive(context: Context?, intent: Intent?) {
+                        val receivedCode = intent?.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
+                        authenticationCode = receivedCode
+                        Log.d(TAG, "✅ Authentication code received: $receivedCode")
+                    }
                 }
             }
 
+            // Intent filter to listen for authentication results
+            val authFilter = IntentFilter(AuthConstants.AUTH_RESULT_ACTION)
+
+            // Register the receiver dynamically
             ContextCompat.registerReceiver(
                 this,
-                receiver,
-                filter,
+                authReceiver,
+                authFilter,
                 ContextCompat.RECEIVER_NOT_EXPORTED
             )
-
+            // UI Content
             Surface {
                 ContentView(
-                    authCode = receivedAuthCode,
-                    onDismiss = { receivedAuthCode = null }
+                    authenticationCode = authenticationCode,
+                    onDismiss = { authenticationCode = null }
                 )
             }
 
+            // Cleanup - Unregister the receiver when the component is disposed
             DisposableEffect(Unit) {
-                onDispose { unregisterReceiver(receiver) }
+                onDispose {
+                    unregisterReceiver(authReceiver)
+                    Log.d(TAG, "Unregistered BroadcastReceiver")
+                }
             }
         }
     }
