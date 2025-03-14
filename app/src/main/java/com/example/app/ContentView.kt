@@ -14,22 +14,22 @@ import io.projectliberty.siwf.Siwf
 /**
  * AuthScreen - Displays sign-in buttons and handles authorization dialog.
  *
- * @param authenticationCode The authorization code received from authentication flow (nullable).
+ * @param authorizationCode The authorization code received from authentication flow (nullable).
  * @param onDismiss Callback to handle dialog dismissal.
  */
 @Composable
-fun ContentView(authenticationCode: String?, onDismiss: () -> Unit) {
+fun ContentView(authorizationCode: String?, onDismiss: () -> Unit) {
     // Show the dialog only if an authorization code is received
-    var showDialog by remember(authenticationCode) { mutableStateOf(authenticationCode != null) }
+    var showDialog by remember(authorizationCode) { mutableStateOf(authorizationCode != null) }
 
-    if (showDialog && authenticationCode != null) {
+    if (showDialog && authorizationCode != null) {
         AlertDialog(
             onDismissRequest = {
                 showDialog = false
                 onDismiss()
             },
             title = { Text("Authorization Code Received") },
-            text = { Text("Code: $authenticationCode") },
+            text = { Text("Code: $authorizationCode") },
             confirmButton = {
                 Button(onClick = {
                     showDialog = false

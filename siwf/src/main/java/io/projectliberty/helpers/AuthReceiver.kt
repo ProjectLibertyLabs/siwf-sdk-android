@@ -14,16 +14,16 @@ class AuthReceiver(private val onAuthReceived: (String?) -> Unit) : BroadcastRec
             return
         }
 
-        val authenticationCode = intent.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
+        val authorizationCode = intent.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
 
-        if (authenticationCode.isNullOrEmpty()) {
+        if (authorizationCode.isNullOrEmpty()) {
             Log.w(TAG, "⚠️ No authorization code found in broadcast intent.")
             return
         }
 
-        Log.d(TAG, "✅ Authorization Code Received: $authenticationCode")
+        Log.d(TAG, "✅ Authorization Code Received: $authorizationCode")
 
         // Trigger the callback with the extracted authorization code
-        onAuthReceived(authenticationCode)
+        onAuthReceived(authorizationCode)
     }
 }
