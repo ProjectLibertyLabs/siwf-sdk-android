@@ -3,14 +3,23 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.10"
+    id("maven-publish")
+    id("signing")
+    id("org.jreleaser") version "1.17.0"
 }
+
+group = "io.projectliberty"
+version = System.getenv("RELEASE_VERSION") ?: "0.0.0-SNAPSHOT"
 
 android {
     namespace = "io.projectliberty.siwf"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
+        aarMetadata {
+            minCompileSdk = 24
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -31,6 +40,101 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.projectliberty"
+            artifactId = "siwf"
+            afterEvaluate {
+                from(components["release"])
+            }
+
+            pom {
+                name.set("SIWF")
+                description.set("SIWF SDK for Android")
+                url.set("https://github.com/ProjectLibertyLabs/siwf-sdk-android/")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/ProjectLibertyLabs/siwf-sdk-android.git")
+                    developerConnection.set("scm:git:ssh://github.com/ProjectLibertyLabs/siwf-sdk-android.git")
+                    url.set("https://github.com/ProjectLibertyLabs/siwf-sdk-android/")
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "PreDeploy"
+            url = uri(layout.buildDirectory.dir("pre-deploy"))
+        }
+    }
+}
+
+jreleaser {
+    gitRootSearch.set(true)
+
+    release {
+        github {
+            //Requires env variable: JRELEASER_GITHUB_TOKEN
+            update {
+                enabled.set(true)
+                sections.set(setOf(
+                    org.jreleaser.model.UpdateSection.TITLE,
+                    org.jreleaser.model.UpdateSection.BODY,
+                    org.jreleaser.model.UpdateSection.ASSETS
+                ))
+            }
+
+            prerelease {
+                enabled.set(true)
+                pattern.set(".*-(snapshot|SNAPSHOT)\$")
+            }
+        }
+    }
+
+    signing {
+        active.set(org.jreleaser.model.Active.ALWAYS)
+        mode = org.jreleaser.model.Signing.Mode.FILE
+        publicKey = "./signing-public-key.asc"
+        secretKey = "./signing-secret-key.gpg"
+        armored.set(true)
+    }
+
+    deploy {
+        maven {
+            pomchecker {
+                version = "1.14.0"
+                failOnWarning = true
+                failOnError = true
+            }
+            mavenCentral {
+                create("sonatype") {
+                    //Requires env variables
+                    // JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME
+                    // JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN
+                    active.set(org.jreleaser.model.Active.ALWAYS)
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    snapshotSupported = true
+                    stagingRepository("build/pre-deploy")
+                    verifyPom = true
+                    applyMavenCentralRules = true
+                }
+            }
+        }
     }
 }
 

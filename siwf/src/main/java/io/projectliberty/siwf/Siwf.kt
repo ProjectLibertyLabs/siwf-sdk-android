@@ -1,10 +1,9 @@
 package io.projectliberty.siwf
 
-import android.util.Log
 import androidx.compose.runtime.Composable
+import io.projectliberty.helpers.generateAuthUrl
 import io.projectliberty.models.GenerateAuthRequest
 import io.projectliberty.models.SiwfButtonMode
-import io.projectliberty.helpers.generateAuthUrl
 
 /**
  * Object containing helper functions for Sign-In With Frequency (SIWF) authentication.

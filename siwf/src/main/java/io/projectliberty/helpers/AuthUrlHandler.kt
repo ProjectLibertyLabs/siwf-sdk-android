@@ -3,8 +3,8 @@ package io.projectliberty.helpers
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
 import android.util.Log
+import androidx.browser.customtabs.CustomTabsIntent
 
 private const val TAG = "SIWF.SiwfUrlHandler"
 

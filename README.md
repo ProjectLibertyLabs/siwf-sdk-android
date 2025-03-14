@@ -107,3 +107,37 @@ To contribute:
 - Fork the repo and create a feature branch.
 - Make changes and test.
 - Submit a pull request with details.
+
+## Release
+
+Use GitHub to create a release.
+That will trigger CI to do the release and update with [jreleaser](https://jreleaser.org/guide/latest/tools/jreleaser-gradle.html).
+
+### Example Release Steps
+
+1. Set the environment variable: `RELEASE_VERSION` to `x.y.z` or `x.y.z-SNAPSHOT`
+2. Show config: `RELEASE_VERSION="1.0.0" ./gradlew siwf:jreleaserConfig --dryrun --full`
+3. Staging build `RELEASE_VERSION="1.0.0" ./gradlew siwf:publishReleasePublicationToPreDeployRepository`
+4. Dry run `RELEASE_VERSION="1.0.0" ./gradlew siwf:jreleaserFullRelease --dryrun`
+
+### Release Secrets
+Can be set in `/siwf/.env`
+```
+# Release Username for Maven Central / SonaType
+JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME=<replace>
+# Release Token for Maven Central / SonaType
+JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN=<replace>
+
+# Release GitHub Token with Permissions
+JRELEASER_GITHUB_TOKEN=<replace>
+
+# Release Signing GPG Passphrase
+JRELEASER_GPG_PASSPHRASE=<replace>
+# Release Signing GPG Public Key (base64 encoded)
+```
+
+### GPG Signing Key Rotation
+
+1. Generate new key
+2. Export key and commit `gpg --armor --export <KEY ID> > ./siwf/signing-public-key.asc`
+3. Update GitHub env vars with the Secret Key `gpg --armor --export-secret-key <KEY ID>`
