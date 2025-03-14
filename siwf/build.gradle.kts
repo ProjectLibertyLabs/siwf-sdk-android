@@ -3,14 +3,22 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.1.10"
+    id("maven-publish")
+    id("signing")
 }
+
+group = "io.projectliberty"
+version = System.getenv("RELEASE_VERSION") ?: "0.0.0-SNAPSHOT"
 
 android {
     namespace = "io.projectliberty.siwf"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
+        aarMetadata {
+            minCompileSdk = 24
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -32,6 +40,49 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.projectliberty"
+            artifactId = "siwf"
+            version = System.getenv("RELEASE_VERSION") ?: "0.0.0-SNAPSHOT"
+            pom {
+                name.set("SIWF")
+                description.set("SIWF SDK for Android")
+                url.set("https://github.com/ProjectLibertyLabs/siwf-sdk-android/")
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/ProjectLibertyLabs/siwf-sdk-android.git")
+                    developerConnection.set("scm:git:ssh://github.com/ProjectLibertyLabs/siwf-sdk-android.git")
+                    url.set("https://github.com/ProjectLibertyLabs/siwf-sdk-android/")
+                }
+            }
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
+}
+
+signing {
+    useInMemoryPgpKeys(
+        System.getenv("GPG_SECRET_KEY"),
+        System.getenv("GPG_PASSPHRASE")
+    )
+    sign(publishing.publications)
 }
 
 dependencies {
