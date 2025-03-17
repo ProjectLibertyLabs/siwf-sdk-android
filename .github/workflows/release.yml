@@ -41,7 +41,7 @@ jobs:
       - name: Check Step
         run: gradle check
 
-      - name: Publish Dry Run
+      - name: Publish to Maven
         env:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME }}
