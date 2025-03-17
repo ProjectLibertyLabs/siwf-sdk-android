@@ -1,1 +1,3 @@
 /build
+.env
+signing-secret-key.gpg

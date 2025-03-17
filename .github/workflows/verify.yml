@@ -1,0 +1,47 @@
+name: Verify
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      RELEASE_VERSION: 0.0.0-SNAPSHOT
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: "temurin"
+          cache: "gradle"
+
+      - name: Gradle Check
+        run: gradle check
+
+      - name: Gradle Test
+        run: gradle test
+
+      - name: Decode GPG key
+        run: |
+          echo "${{ secrets.GPG_SECRET_KEY_BASE64 }}" | base64 --decode > ./siwf/signing-secret-key.gpg
+
+      - name: Library Release Dry Run
+        env:
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME: ${{ secrets.JRELEASER_MAVENCENTRAL_SONATYPE_USERNAME }}
+          JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN: ${{ secrets.JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.JRELEASER_GPG_PASSPHRASE }}
+        run: |
+          gradle siwf:publishReleasePublicationToPreDeployRepository
+          gradle siwf:jreleaserFullRelease --dryrun
