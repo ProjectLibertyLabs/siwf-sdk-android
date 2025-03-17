@@ -132,11 +132,12 @@ jreleaser {
                     // JRELEASER_MAVENCENTRAL_SONATYPE_TOKEN
                     active.set(org.jreleaser.model.Active.ALWAYS)
                     url = "https://central.sonatype.com/api/v1/publisher"
-                    snapshotSupported = true
+                    snapshotSupported = false
                     stagingRepository("build/pre-deploy")
                     sign = true
                     verifyPom = false
                     applyMavenCentralRules = true
+                    retryDelay = 120
                 }
             }
         }
