@@ -66,6 +66,16 @@ publishing {
                         url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
                     }
                 }
+                developers {
+                    developer {
+                        id.set("claire.clark")
+                        name.set("Claire Clark")
+                    }
+                    developer {
+                        id.set("wil.wade")
+                        name.set("Wil Wade")
+                    }
+                }
                 scm {
                     connection.set("scm:git:git://github.com/ProjectLibertyLabs/siwf-sdk-android.git")
                     developerConnection.set("scm:git:ssh://github.com/ProjectLibertyLabs/siwf-sdk-android.git")
@@ -115,11 +125,6 @@ jreleaser {
 
     deploy {
         maven {
-            pomchecker {
-                version = "1.14.0"
-                failOnWarning = true
-                failOnError = true
-            }
             mavenCentral {
                 create("sonatype") {
                     //Requires env variables
