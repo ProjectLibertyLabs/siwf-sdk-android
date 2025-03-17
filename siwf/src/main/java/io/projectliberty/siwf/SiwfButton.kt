@@ -26,9 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.projectliberty.helpers.fallbackOpenUrl
-import io.projectliberty.helpers.fetchAssets
 import io.projectliberty.helpers.getButtonStyle
 import io.projectliberty.helpers.getLocalAssets
+import io.projectliberty.helpers.getRemoteAssets
 import io.projectliberty.helpers.openUrl
 import io.projectliberty.models.SiwfButtonMode
 
@@ -53,10 +53,10 @@ fun SiwfButton(
 
     LaunchedEffect(Unit) {
         Log.d(TAG, "⏳ Fetching SIWF assets...")
-        val assets = fetchAssets()
-        if (assets != null) {
-            // If we get remote remote assets, set button styles to latest
-            buttonStyle = getButtonStyle(mode, assets)
+        val remoteAssets = getRemoteAssets()
+        if (remoteAssets != null) {
+            // If we get remote assets, set button styles to latest
+            buttonStyle = getButtonStyle(mode, remoteAssets)
             return@LaunchedEffect
         }
     }
