@@ -2,10 +2,9 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    kotlin("plugin.serialization") version "2.1.10"
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.jreleaser)
     id("maven-publish")
-    id("signing")
-    id("org.jreleaser") version "1.17.0"
 }
 
 group = "io.projectliberty"
@@ -130,7 +129,8 @@ jreleaser {
                     url = "https://central.sonatype.com/api/v1/publisher"
                     snapshotSupported = true
                     stagingRepository("build/pre-deploy")
-                    verifyPom = true
+                    sign = true
+                    verifyPom = false
                     applyMavenCentralRules = true
                 }
             }
