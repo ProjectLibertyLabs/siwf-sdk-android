@@ -139,6 +139,8 @@ The `BroadcastReceiver` listens for authentication results and extracts the auth
                 override fun onReceive(context: Context?, intent: Intent?) {
                     val receivedCode = intent?.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
                     authorizationCode = receivedCode
+                    // Process the authorizationCode by sending it it your backend servers
+                    // See https://projectlibertylabs.github.io/siwf/v2/docs/Actions/Response.html
                 }
             }
         }
