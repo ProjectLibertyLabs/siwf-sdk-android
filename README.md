@@ -151,7 +151,8 @@ The `BroadcastReceiver` listens for authentication results and extracts the auth
             authFilter,
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
-    //    ...
+    
+        // Render UI content
     }
 ```
 
