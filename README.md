@@ -71,8 +71,8 @@ dependencies {
 ## 🛠 **Usage For Your App**
 When you decide to use the SIWF SDK in your own app, follow the steps below for easy integration:
 
-### **1️⃣ Define an `authRequest`**
-- Refer to the Demo App for examples of encoded and non-encoded requests.
+### **1️⃣ Define the SIWF Authentication Details**
+- Refer to the Demo App for examples of encoded and non-encoded auth requests.
 - To create your own, use [Frequency's Signed Request Generator](https://projectlibertylabs.github.io/siwf/v2/docs/Generate.html).
 
 ### **2️⃣ Display the SIWF Sign-In Button**
