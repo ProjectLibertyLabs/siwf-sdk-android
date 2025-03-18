@@ -157,6 +157,13 @@ The `BroadcastReceiver` listens for authentication results and extracts the auth
         // Render UI content
     }
 ```
+### **4️⃣ Process Authorization Code**
+
+On your backend services process the authorization code and start your session.
+
+Resources:
+- [SIWF Documentation on Processing a Result](https://projectlibertylabs.github.io/siwf/v2/docs/Actions/Response.html)
+- [Frequency Gateway SSO Tutorial](https://projectlibertylabs.github.io/gateway/GettingStarted/SSO.html)
 
 ## 🤝 **Contributing**
 To contribute:
