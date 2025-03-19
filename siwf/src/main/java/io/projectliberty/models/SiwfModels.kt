@@ -52,3 +52,8 @@ data class SiwfCredential(
 data class AnyOfRequired(
     @SerialName("anyOf") val anyOf: List<SiwfCredential>
 ) : SiwfRequestedCredential()
+
+@Serializable
+data class ApplicationContextUrl(
+    val url: String
+)
