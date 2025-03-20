@@ -36,23 +36,31 @@ data class Images(
     val logoDark: String
 )
 
-fun getRemoteAssets(): Assets? {
-    val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
-    val url = URL(urlString)
-    val connection = url.openConnection() as HttpURLConnection
-    connection.requestMethod = "GET"
-    connection.connectTimeout = 5000
-    connection.readTimeout = 5000
-    connection.connect()
+// Only one JSON Parser instance is needed
+private val jsonParser = Json { ignoreUnknownKeys = true }
 
-    if (connection.responseCode == HttpURLConnection.HTTP_OK) {
-        val json = connection.inputStream.bufferedReader().use { it.readText() }
-        connection.disconnect()
-        return Json { ignoreUnknownKeys = true }.decodeFromString<Assets>(json)
-    } else {
-        Log.e("fetchAssets", "Error: ${connection.responseCode}")
-        connection.disconnect()
-        return null
+suspend fun getRemoteAssets(): Assets? = withContext(Dispatchers.IO) {
+    try {
+        val urlString = "https://projectlibertylabs.github.io/siwf/v2/assets/assets.json"
+        val url = URL(urlString)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.connectTimeout = 5000
+        connection.readTimeout = 5000
+        connection.connect()
+
+        return@withContext if (connection.responseCode == HttpURLConnection.HTTP_OK) {
+            val json = connection.inputStream.bufferedReader().use { it.readText() }
+            connection.disconnect()
+            jsonParser.decodeFromString<Assets>(json)
+        } else {
+            Log.e("fetchAssets", "Error: ${connection.responseCode}")
+            connection.disconnect()
+            null
+        }
+    } catch (e: Exception) {
+        Log.e("fetchAssets", "Exception: ${e.message}")
+        null
     }
 }
 
