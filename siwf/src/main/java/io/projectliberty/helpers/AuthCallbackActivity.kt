@@ -57,7 +57,6 @@ class AuthCallbackActivity : ComponentActivity() {
      */
     private fun sendAuthorizationCodeBroadcast(authorizationCode: String, authorizationUri: String) {
         Log.i(TAG, "📡 Broadcasting auth code to app components.")
-        Log.i(TAG, "authorizationUri: *** $authorizationUri")
         val broadcastIntent = Intent(AuthConstants.AUTH_RESULT_ACTION).apply {
             setPackage(packageName)
             putExtra(AuthConstants.AUTH_INTENT_KEY, authorizationCode)
