@@ -7,8 +7,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -76,8 +78,8 @@ fun SiwfButton(
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(2.dp, buttonStyle.borderColor),
         modifier = Modifier
-            .padding(8.dp)
-            .height(50.dp),
+            .height(50.dp)
+            .width(276.dp),
         enabled = authUrl.toString().isNotBlank()
     ) {
         Row(
@@ -88,12 +90,14 @@ fun SiwfButton(
                 Image(
                     bitmap = buttonStyle.logoImage!!,
                     contentDescription = "Logo",
-                    modifier = Modifier.size(33.dp)
+                    modifier = Modifier
+                        .size(33.dp)
+                        .offset(x = (-10).dp)
                 )
             } else {
                 Text("🔄", fontSize = 24.sp)
             }
-            Text(text = buttonStyle.title, fontWeight = FontWeight.Bold, color = buttonStyle.textColor)
+            Text(text = buttonStyle.title, fontWeight = FontWeight.Bold, color = buttonStyle.textColor, fontSize = 16.sp, modifier = Modifier.offset(x = (-6).dp))
         }
     }
 }
