@@ -30,8 +30,7 @@ class MainActivity : ComponentActivity() {
                         val fullRedirectUri = intent?.getStringExtra(AuthConstants.AUTH_INTENT_URI_KEY)
                         incomingAuthCode = receivedCode
                         incomingAuthUri = fullRedirectUri
-                        Log.d(TAG, "✅ Authorization code received: $receivedCode")
-                        Log.d(TAG, "✅ Authorization full uri received: $fullRedirectUri")
+                        Log.d(TAG, "✅ Authorization code and full uri received: $receivedCode, $fullRedirectUri")
                         // Process the authorizationCode by sending it it your backend servers
                         // See https://projectlibertylabs.github.io/siwf/v2/docs/Actions/Response.html
                     }
