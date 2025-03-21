@@ -18,7 +18,7 @@ import io.projectliberty.siwf.Siwf
  * @param onDismiss Callback to handle dialog dismissal.
  */
 @Composable
-fun ContentView(authorizationCode: String?, onDismiss: () -> Unit) {
+fun ContentView(authorizationCode: String?, authorizationUri: String?, onDismiss: () -> Unit) {
     // Show the dialog only if an authorization code is received
     var showDialog by remember(authorizationCode) { mutableStateOf(authorizationCode != null) }
 
@@ -29,7 +29,9 @@ fun ContentView(authorizationCode: String?, onDismiss: () -> Unit) {
                 onDismiss()
             },
             title = { Text("Authorization Code Received") },
-            text = { Text("Code: $authorizationCode") },
+            text = { Text(
+                "Code: $authorizationCode \n Auth Uri: $authorizationUri"
+            ) },
             confirmButton = {
                 Button(onClick = {
                     showDialog = false
@@ -116,6 +118,9 @@ fun createAuthRequest(): GenerateAuthRequest {
     return GenerateAuthRequest(
         signedRequest = signedRequest, // Switch to encodedSignedRequest if needed
         additionalCallbackUrlParams = emptyMap(),
+//        additionalCallbackUrlParams = mapOf(
+//            "abc" to "123"
+//        ),
         options = Options(endpoint = "testnet") // Switch to "mainnet" if needed
     )
 }
