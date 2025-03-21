@@ -21,14 +21,17 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             var authorizationCode by remember { mutableStateOf<String?>(null) }
-
+            var authorizationUri by remember { mutableStateOf<String?>(null) }
             // Broadcast Receiver to listen for authentication results
             val authReceiver = remember {
                 object : BroadcastReceiver() {
                     override fun onReceive(context: Context?, intent: Intent?) {
                         val receivedCode = intent?.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
+                        val fullRedirectUri = intent?.getStringExtra(AuthConstants.AUTH_INTENT_URI_KEY)
                         authorizationCode = receivedCode
+                        authorizationUri = fullRedirectUri
                         Log.d(TAG, "✅ Authorization code received: $receivedCode")
+                        Log.d(TAG, "✅ Authorization full uri received: $fullRedirectUri")
                         // Process the authorizationCode by sending it it your backend servers
                         // See https://projectlibertylabs.github.io/siwf/v2/docs/Actions/Response.html
                     }
@@ -49,7 +52,11 @@ class MainActivity : ComponentActivity() {
             Surface {
                 ContentView(
                     authorizationCode = authorizationCode,
-                    onDismiss = { authorizationCode = null }
+                    authorizationUri = authorizationUri
+                    onDismiss = {
+                        authorizationCode = null
+                        authorizationUri = null
+                    }
                 )
             }
 
