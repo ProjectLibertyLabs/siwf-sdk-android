@@ -39,7 +39,7 @@ class AuthCallbackActivity : ComponentActivity() {
         // Extract authorization code from query parameters
         val authorizationCode = data.getQueryParameter(AuthConstants.AUTH_INTENT_KEY)
         if (authorizationCode.isNullOrEmpty()) {
-            Log.w(TAG, "⚠️ **** No authorization code found in deep link.")
+            Log.w(TAG, "⚠️ No authorization code found in deep link.")
         } else {
             Log.d(TAG, "✅ Authorization Code Extracted: $authorizationCode")
             // Broadcast the auth code and full auth uri to other parts of the app
