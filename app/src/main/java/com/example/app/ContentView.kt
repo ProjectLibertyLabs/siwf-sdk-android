@@ -29,7 +29,9 @@ fun ContentView(authorizationCode: String?, authorizationUri: String?, onDismiss
                 onDismiss()
             },
             title = { Text("Authorization Code Received") },
-            text = { Text("Code: $authorizationCode") },
+            text = { Text(
+                "Code: $authorizationCode \n Auth Uri: $authorizationUri"
+            ) },
             confirmButton = {
                 Button(onClick = {
                     showDialog = false
@@ -115,10 +117,10 @@ fun createAuthRequest(): GenerateAuthRequest {
 
     return GenerateAuthRequest(
         signedRequest = signedRequest, // Switch to encodedSignedRequest if needed
-//        additionalCallbackUrlParams = emptyMap(),
-        additionalCallbackUrlParams = mapOf(
-            "abc" to "123"
-        ),
+        additionalCallbackUrlParams = emptyMap(),
+//        additionalCallbackUrlParams = mapOf(
+//            "abc" to "123"
+//        ),
         options = Options(endpoint = "testnet") // Switch to "mainnet" if needed
     )
 }
