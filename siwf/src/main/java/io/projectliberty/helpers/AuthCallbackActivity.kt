@@ -42,7 +42,6 @@ class AuthCallbackActivity : ComponentActivity() {
             Log.w(TAG, "⚠️ **** No authorization code found in deep link.")
         } else {
             Log.d(TAG, "✅ Authorization Code Extracted: $authorizationCode")
-            Log.d(TAG, "✅ Authorization Uri Received: $data")
             // Broadcast the auth code and full auth uri to other parts of the app
             sendAuthorizationCodeBroadcast(authorizationCode, data.toString())
         }
