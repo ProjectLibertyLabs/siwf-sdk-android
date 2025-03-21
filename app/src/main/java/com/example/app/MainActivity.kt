@@ -20,16 +20,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            var authorizationCode by remember { mutableStateOf<String?>(null) }
-            var authorizationUri by remember { mutableStateOf<String?>(null) }
+            var incomingAuthCode by remember { mutableStateOf<String?>(null) }
+            var incomingAuthUri by remember { mutableStateOf<String?>(null) }
             // Broadcast Receiver to listen for authentication results
             val authReceiver = remember {
                 object : BroadcastReceiver() {
                     override fun onReceive(context: Context?, intent: Intent?) {
                         val receivedCode = intent?.getStringExtra(AuthConstants.AUTH_INTENT_KEY)
                         val fullRedirectUri = intent?.getStringExtra(AuthConstants.AUTH_INTENT_URI_KEY)
-                        authorizationCode = receivedCode
-                        authorizationUri = fullRedirectUri
+                        incomingAuthCode = receivedCode
+                        incomingAuthUri = fullRedirectUri
                         Log.d(TAG, "✅ Authorization code received: $receivedCode")
                         Log.d(TAG, "✅ Authorization full uri received: $fullRedirectUri")
                         // Process the authorizationCode by sending it it your backend servers
@@ -51,11 +51,11 @@ class MainActivity : ComponentActivity() {
             // UI Content
             Surface {
                 ContentView(
-                    authorizationCode = authorizationCode,
-                    authorizationUri = authorizationUri
+                    authorizationCode = incomingAuthCode,
+                    authorizationUri = incomingAuthUri,
                     onDismiss = {
-                        authorizationCode = null
-                        authorizationUri = null
+                        incomingAuthCode = null
+                        incomingAuthUri = null
                     }
                 )
             }

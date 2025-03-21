@@ -38,15 +38,12 @@ class AuthCallbackActivity : ComponentActivity() {
 
         // Extract authorization code from query parameters
         val authorizationCode = data.getQueryParameter(AuthConstants.AUTH_INTENT_KEY)
-        val authorizationUri = data.getQueryParameter("abc")
-        Log.d(TAG, "******* $authorizationCode")
-        Log.d(TAG, "******* $authorizationUri")
         if (authorizationCode.isNullOrEmpty()) {
             Log.w(TAG, "⚠️ **** No authorization code found in deep link.")
         } else {
             Log.d(TAG, "✅ Authorization Code Extracted: $authorizationCode")
-
-            // Broadcast the auth code to other parts of the app
+            Log.d(TAG, "✅ Authorization Uri Received: $data")
+            // Broadcast the auth code and full auth uri to other parts of the app
             sendAuthorizationCodeBroadcast(authorizationCode, data)
         }
 
@@ -64,7 +61,7 @@ class AuthCallbackActivity : ComponentActivity() {
         val broadcastIntent = Intent(AuthConstants.AUTH_RESULT_ACTION).apply {
             setPackage(packageName)
             putExtra(AuthConstants.AUTH_INTENT_KEY, authorizationCode)
-            putExtra(AuthConstants.AUTH_INTENT_URI_KEY, authorizationCode)
+            putExtra(AuthConstants.AUTH_INTENT_URI_KEY, authorizationUri)
         }
         sendBroadcast(broadcastIntent)
     }
