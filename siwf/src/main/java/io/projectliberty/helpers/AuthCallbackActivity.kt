@@ -34,7 +34,7 @@ class AuthCallbackActivity : ComponentActivity() {
             return
         }
 
-        Log.d(TAG, "🔗 Deep Link received ****: $data")
+        Log.d(TAG, "🔗 Deep Link received: $data")
 
         // Extract authorization code from query parameters
         val authorizationCode = data.getQueryParameter(AuthConstants.AUTH_INTENT_KEY)
