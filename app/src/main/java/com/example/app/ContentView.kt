@@ -115,7 +115,11 @@ fun createAuthRequest(): GenerateAuthRequest {
 
     return GenerateAuthRequest(
         signedRequest = signedRequest, // Switch to encodedSignedRequest if needed
-        additionalCallbackUrlParams = emptyMap(),
+//        additionalCallbackUrlParams = emptyMap(),
+        additionalCallbackUrlParams = mapOf(
+            "signedRequest" to "123",
+            "abc" to "123"
+        ),
         options = Options(endpoint = "testnet") // Switch to "mainnet" if needed
     )
 }
